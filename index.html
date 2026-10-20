@@ -1,0 +1,2782 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Точка контакта — игра о поиске работы и людях</title>
+<meta name="description" content="Игра для соискателей и нанимателей: выбери сторону, пройди шесть уровней и посмотри, как одна история выглядит с двух сторон. В конце — резюме автора.">
+<meta property="og:title" content="Точка контакта — игра о поиске работы и людях">
+<meta property="og:description" content="47 отказов или 300 резюме? Выбери сторону и пройди путь до оффера. Или до честного «нет».">
+<meta name="author" content="Булат Хайрльварин">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#08080c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b0b10'/%3E%3Cpath d='M10 40c5-8 10-8 15 0s10 8 15 0 10-8 15 0' fill='none' stroke='%238b7cff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M10 26c5-8 10-8 15 0s10 8 15 0 10-8 15 0' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' opacity='.8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080c;
+  --card:#14141c;
+  --text:#f4f2ff;
+  --muted:#9a96ad;
+  --line:rgba(255,255,255,.09);
+  --violet:#7c5cff;
+  --violet-2:#a78bfa;
+  --lime:#c8ff6a;
+  --pink:#ff6fa5;
+  --orange:#ffb86b;
+  --red:#ff6b6b;
+  --radius:28px;
+  --font-display:'Unbounded','Arial Black',sans-serif;
+  --font-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+a{color:inherit}
+::selection{background:rgba(124,92,255,.5);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#0b0b10}
+::-webkit-scrollbar-thumb{background:#2b2b3b;border-radius:99px;border:2px solid #0b0b10}
+:focus-visible{outline:2px solid var(--violet-2);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- background ---------- */
+.bg{position:fixed;inset:0;z-index:-4;background:
+  radial-gradient(1100px 760px at 50% -12%, rgba(124,92,255,.32), transparent 62%),
+  radial-gradient(820px 620px at 102% 18%, rgba(255,111,165,.10), transparent 60%),
+  radial-gradient(820px 620px at -2% 86%, rgba(74,144,255,.11), transparent 60%),
+  #08080c;}
+.bg-grid{position:fixed;inset:0;z-index:-3;background-image:
+  linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:74px 74px;background-position:center;
+  -webkit-mask-image:radial-gradient(ellipse 88% 78% at 50% 18%,#000 8%,transparent 78%);
+  mask-image:radial-gradient(ellipse 88% 78% at 50% 18%,#000 8%,transparent 78%);}
+.bg-noise{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");background-size:180px 180px;}
+#net-canvas{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:.55}
+
+/* ---------- header ---------- */
+.site-header{
+  position:sticky;top:0;z-index:80;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px clamp(18px,4vw,44px);
+  background:linear-gradient(to bottom,rgba(8,8,12,.92),rgba(8,8,12,.5) 70%,transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.03em;line-height:1}
+.brand-mark{width:52px;height:22px;color:#fff;flex:none;transition:color .25s}
+.brand:hover .brand-mark{color:var(--violet-2)}
+.header-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);display:grid;place-items:center;cursor:pointer;color:#cfcbdd;transition:background .25s,color .25s,border-color .25s}
+.icon-btn:hover{background:rgba(255,255,255,.09);color:#fff;border-color:rgba(255,255,255,.16)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn .muted-line{display:none}
+.icon-btn[aria-pressed="false"] .muted-line{display:block}
+.icon-btn[aria-pressed="false"] .sound-wave{opacity:.15}
+.pill-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:10px 17px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#e8e6f2;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;transition:background .25s,border-color .25s,transform .25s}
+.pill-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+body.is-landing .header-menu{display:none}
+
+/* ---------- common ---------- */
+.wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+.screen{min-height:calc(100vh - 72px);padding:0 0 70px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#b9b5c9;background:rgba(255,255,255,.045);border:1px solid var(--line);padding:9px 14px;border-radius:999px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,255,106,.45);animation:pulse 2.4s infinite;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:14px 22px;font-size:14px;font-weight:800;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .25s,box-shadow .25s,background .25s,border-color .25s;line-height:1.2}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:linear-gradient(135deg,#947dff,#6847f4);color:#fff;box-shadow:0 14px 34px -14px rgba(124,92,255,.85)}
+.btn-primary:hover{box-shadow:0 18px 42px -14px rgba(124,92,255,.95)}
+.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line);color:#e8e6f2}
+.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+.btn-lime{background:var(--lime);color:#11130d;box-shadow:0 14px 34px -16px rgba(200,255,106,.75)}
+.btn-lime:hover{box-shadow:0 18px 42px -14px rgba(200,255,106,.85)}
+.btn[disabled]{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-sm{padding:10px 16px;font-size:12px}
+
+/* ---------- landing ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);align-items:center;gap:clamp(24px,4vw,56px);padding:clamp(34px,6vw,72px) 0 clamp(28px,4vw,46px)}
+.hero-copy{min-width:0}
+.hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(54px,8.2vw,106px);line-height:.9;letter-spacing:-.055em;margin:22px 0 24px;text-transform:none}
+.hero h1 .grad{background:linear-gradient(108deg,#fff 2%,#c6b8ff 34%,#8b7cff 58%,#ff8fc0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;padding-right:.06em}
+.lead{font-size:clamp(16px,1.65vw,19px);line-height:1.65;color:#bbb7cb;max-width:590px;margin:0}
+.hero-meta{display:flex;margin-top:32px;flex-wrap:wrap;gap:0}
+.hero-meta>div{padding-right:22px;margin-right:22px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:3px}
+.hero-meta>div:last-child{border-right:0;margin-right:0;padding-right:0}
+.hero-meta b{font-family:var(--font-display);font-size:24px;font-weight:600;line-height:1}
+.hero-meta span{font-size:11px;color:#8f8ba6;letter-spacing:.09em;text-transform:uppercase}
+.hero-visual{position:relative;width:min(100%,430px);aspect-ratio:1;justify-self:end;display:grid;place-items:center;filter:drop-shadow(0 30px 80px rgba(0,0,0,.45))}
+.orbit{position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,.14);inset:4%;animation:spin 46s linear infinite}
+.orbit-2{inset:17%;border-style:solid;border-color:rgba(255,255,255,.07);animation-direction:reverse;animation-duration:34s}
+.orbit-3{inset:30%;border-color:rgba(139,124,255,.24);animation-duration:26s}
+.orbit-lines{position:absolute;inset:0;width:100%;height:100%}
+.orbit-lines line{stroke:rgba(255,255,255,.13);stroke-width:.35;stroke-dasharray:1 2}
+.orbit-core{position:relative;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#d7cdff,#7c5cff 45%,#3a1e9e 100%);box-shadow:0 0 80px rgba(124,92,255,.6),inset 0 0 30px rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+.orbit-core b{font-family:var(--font-display);font-size:22px;line-height:1;font-weight:700}
+.orbit-core span{font-size:10px;text-transform:uppercase;letter-spacing:.17em;opacity:.72;margin-top:4px}
+.orbit-node{position:absolute;display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:rgba(20,20,30,.88);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:700;color:#e8e6f2;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.35);animation:floaty 6s ease-in-out infinite;z-index:3;white-space:nowrap}
+.orbit-node i{width:7px;height:7px;border-radius:50%;background:#8b7cff;box-shadow:0 0 12px #8b7cff;flex:none}
+.orbit-node.n1{top:8%;left:2%;animation-delay:-1s}
+.orbit-node.n2{top:14%;right:0;animation-delay:-2.4s}
+.orbit-node.n3{bottom:20%;left:0;animation-delay:-3.2s}
+.orbit-node.n4{bottom:9%;right:6%;animation-delay:-.6s}
+.orbit-node.n5{bottom:-2%;left:38%;animation-delay:-4s}
+.orbit-node.n4 i{background:var(--red);box-shadow:0 0 12px var(--red)}
+.orbit-node.n5 i{background:var(--lime);box-shadow:0 0 12px var(--lime)}
+
+.continue-strip{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:16px 20px;border-radius:20px;border:1px solid rgba(200,255,106,.28);background:linear-gradient(90deg,rgba(200,255,106,.1),rgba(255,255,255,.02));cursor:pointer;margin:0 0 18px;color:var(--text);transition:border-color .25s,background .25s,transform .25s}
+.continue-strip:hover{border-color:rgba(200,255,106,.55);background:linear-gradient(90deg,rgba(200,255,106,.15),rgba(255,255,255,.03));transform:translateY(-2px)}
+.continue-dot{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,255,106,.4);animation:pulse 2.2s infinite;flex:none}
+.continue-copy{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.continue-copy b{font-size:14px}
+.continue-copy span{font-size:12px;color:#a9a5ba}
+.continue-arrow{font-size:20px;color:var(--lime);flex:none}
+
+.roles-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:4px 0 16px;flex-wrap:wrap}
+.roles-head h2{font-family:var(--font-display);font-size:clamp(22px,2.6vw,30px);letter-spacing:-.035em;margin:0;line-height:1.1}
+.roles-head span{font-size:12px;color:#8f8ba6}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.role-card{position:relative;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:clamp(22px,3vw,30px);min-height:340px;border-radius:var(--radius);border:1px solid rgba(255,255,255,.1);background:linear-gradient(155deg,rgba(255,255,255,.065),rgba(255,255,255,.018));cursor:pointer;transition:transform .35s,border-color .35s,box-shadow .35s;color:var(--text)}
+.role-card::after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;right:-150px;top:-170px;background:radial-gradient(circle,rgba(124,92,255,.34),transparent 65%);opacity:.7;transition:opacity .35s,transform .35s;pointer-events:none}
+.role-card[data-mode="employer"]::after{background:radial-gradient(circle,rgba(255,111,165,.27),transparent 65%)}
+.role-card:hover{transform:translateY(-5px);border-color:rgba(139,124,255,.55);box-shadow:0 34px 80px -34px rgba(124,92,255,.45)}
+.role-card[data-mode="employer"]:hover{border-color:rgba(255,111,165,.5);box-shadow:0 34px 80px -34px rgba(255,111,165,.35)}
+.role-card:hover::after{opacity:1;transform:scale(1.12)}
+.role-head{display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;z-index:1}
+.role-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:rgba(124,92,255,.16);border:1px solid rgba(124,92,255,.3);color:#c5b9ff;flex:none}
+.role-card[data-mode="employer"] .role-icon{background:rgba(255,111,165,.12);border-color:rgba(255,111,165,.28);color:#ffb3cd}
+.role-icon svg{width:24px;height:24px}
+.role-duration{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#8f8ba6}
+.role-tag{position:relative;z-index:1;margin-top:26px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#a79bff}
+.role-card[data-mode="employer"] .role-tag{color:#ff9cbe}
+.role-card h2{position:relative;z-index:1;font-family:var(--font-display);font-size:clamp(28px,3.4vw,40px);letter-spacing:-.04em;margin:6px 0 10px;line-height:1.05}
+.role-card p{position:relative;z-index:1;font-size:15px;line-height:1.65;color:#b9b5c9;max-width:43ch;margin:0}
+.role-foot{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}
+.role-levels{font-size:11px;color:#8f8ba6}
+.role-go{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#fff;white-space:nowrap}
+.role-go span{transition:transform .25s}
+.role-card:hover .role-go span{transform:translateX(4px)}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:38px}
+.feature{padding:22px;border-radius:22px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.feature-num{font-family:var(--font-display);font-size:12px;color:#8b7cff;font-weight:600}
+.feature h3{font-size:15px;margin:14px 0 6px;line-height:1.35}
+.feature p{font-size:13px;line-height:1.6;color:#9a96ad;margin:0}
+.both-banner{display:flex;align-items:center;gap:12px;margin-top:18px;padding:16px 20px;border-radius:20px;border:1px solid rgba(139,124,255,.28);background:linear-gradient(90deg,rgba(124,92,255,.13),rgba(255,255,255,.02));font-size:13px;color:#c6c2d6}
+.both-banner b{color:#fff}
+.both-banner i{width:9px;height:9px;border-radius:50%;background:var(--lime);flex:none;box-shadow:0 0 14px rgba(200,255,106,.8)}
+
+/* ---------- game ---------- */
+.game-screen{padding-top:clamp(20px,3vw,32px)}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.mode-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(124,92,255,.12);border:1px solid rgba(124,92,255,.28);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c8bdff}
+.mode-chip i{width:7px;height:7px;border-radius:50%;background:#8b7cff;flex:none}
+.progress-mini{display:flex;align-items:center;gap:12px;font-size:11px;color:#8f8ba6;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.dots{display:flex;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.14);transition:background .3s,box-shadow .3s}
+.dot.done{background:#8b7cff}
+.dot.current{background:#fff;box-shadow:0 0 0 4px rgba(124,92,255,.2)}
+.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 318px;gap:22px;align-items:start}
+.scene-card{position:relative;overflow:hidden;background:linear-gradient(165deg,rgba(25,25,36,.95),rgba(14,14,21,.96));border:1px solid rgba(255,255,255,.09);border-radius:30px;padding:clamp(22px,3.2vw,40px);box-shadow:0 40px 100px -50px #000;min-height:540px;display:flex;flex-direction:column}
+.scene-card::before{content:"";position:absolute;top:-120px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.16),transparent 65%);pointer-events:none}
+.scene-kicker{display:flex;align-items:center;gap:9px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8f8ba6}
+.scene-kicker::before{content:"";width:18px;height:1px;background:#7c5cff;flex:none}
+.scene-title{position:relative;font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);line-height:1.05;letter-spacing:-.035em;margin:12px 0 16px}
+.narrative{position:relative;font-size:16px;line-height:1.72;color:#c6c2d6;max-width:66ch;margin:0}
+.narrative+.narrative{margin-top:10px}
+.prompt{position:relative;font-weight:800;font-size:16px;line-height:1.45;margin:24px 0 12px;color:#f4f2ff}
+.choices{position:relative;display:flex;flex-direction:column;gap:9px}
+.choice{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px 18px;cursor:pointer;transition:background .25s,border-color .25s,transform .25s,box-shadow .25s;color:var(--text)}
+.choice:hover{background:rgba(124,92,255,.12);border-color:rgba(139,124,255,.5);transform:translateX(3px);box-shadow:0 12px 30px -20px rgba(124,92,255,.9)}
+.choice:active{transform:translateX(1px)}
+.choice-key{width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:11px;font-weight:800;color:#b9b5c9;flex:none;margin-top:1px}
+.choice-text{font-size:15px;line-height:1.5;color:#e8e6f2}
+.choice-arrow{margin-left:auto;color:#6f6b82;font-size:18px;line-height:1;flex:none;transition:color .25s,transform .25s;padding-top:3px}
+.choice:hover .choice-arrow{color:#fff;transform:translate(2px,-2px)}
+.key-hint{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:10px;color:#6f6b82}
+.key-hint kbd{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-family:var(--font-body);font-size:10px;color:#9a96ad}
+
+.chat{display:flex;align-items:flex-start;gap:11px;margin:4px 0 18px;animation:rise .35s both}
+.chat-avatar{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#8b7cff,#5b3ce0);display:grid;place-items:center;font-family:var(--font-display);font-size:13px;font-weight:700;flex:none;box-shadow:0 8px 20px -8px rgba(124,92,255,.8)}
+.chat-body{background:#1d1d29;border:1px solid rgba(255,255,255,.08);border-radius:4px 18px 18px 18px;padding:13px 16px;max-width:640px}
+.chat-who{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9d96b8;margin-bottom:4px}
+.chat-text{font-size:15px;line-height:1.55;color:#e8e6f2}
+
+.result-panel{margin-top:6px;border-radius:22px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);padding:clamp(18px,2.5vw,26px);animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.result-panel:focus{outline:none}
+.result-panel[data-tone="great"]{border-color:rgba(200,255,106,.35);background:linear-gradient(165deg,rgba(200,255,106,.09),rgba(255,255,255,.02))}
+.result-panel[data-tone="good"]{border-color:rgba(139,124,255,.38);background:linear-gradient(165deg,rgba(124,92,255,.12),rgba(255,255,255,.02))}
+.result-panel[data-tone="neutral"]{border-color:rgba(255,255,255,.14);background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
+.result-panel[data-tone="bad"]{border-color:rgba(255,107,107,.32);background:linear-gradient(165deg,rgba(255,107,107,.09),rgba(255,255,255,.02))}
+.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.result-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#e8e6f2}
+.result-panel[data-tone="great"] .result-badge{background:rgba(200,255,106,.14);border-color:rgba(200,255,106,.3);color:#dbffa0}
+.result-panel[data-tone="good"] .result-badge{background:rgba(139,124,255,.16);border-color:rgba(139,124,255,.32);color:#c8bdff}
+.result-panel[data-tone="bad"] .result-badge{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.28);color:#ffb3b3}
+.result-ctx{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#8f8ba6}
+.result-text{font-size:16px;line-height:1.7;color:#d8d4e6;margin:0 0 16px;max-width:68ch}
+.effects{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 20px}
+.effect-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#b9b5c9}
+.effect-pill.up{background:rgba(200,255,106,.1);border-color:rgba(200,255,106,.25);color:#d5ff9a}
+.effect-pill.down{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.25);color:#ffb3b3}
+.effect-pill.neutral{color:#8f8ba6}
+
+/* ---------- sidebar ---------- */
+.side-panel{position:sticky;top:90px;display:flex;flex-direction:column;gap:14px}
+.panel{background:rgba(19,19,27,.78);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:18px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:9px;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:#8f8ba6;margin-bottom:14px}
+.panel-title span{letter-spacing:0;font-weight:600;color:#5f5b70;text-transform:none}
+.network-svg{display:block;width:100%;height:auto;overflow:visible}
+.net-line{stroke:rgba(255,255,255,.1);stroke-width:1.3;transition:stroke .4s}
+.net-line.lit{stroke:rgba(139,124,255,.55)}
+.net-node{fill:#242434;stroke:#3a3a50;stroke-width:1.2;transition:fill .4s,stroke .4s}
+.net-node.lit{fill:#8b7cff;stroke:#c5b9ff}
+.net-node.current{fill:#fff;stroke:#c8ff6a;filter:drop-shadow(0 0 6px rgba(200,255,106,.8))}
+.net-core{fill:url(#coreGrad);stroke:rgba(255,255,255,.25)}
+.net-label{fill:#b9b5c9;font-size:8px;font-family:var(--font-body);font-weight:800;text-anchor:middle;pointer-events:none}
+.net-caption{font-size:11px;line-height:1.5;color:#7c7890;margin:12px 0 0}
+.stat-row{margin-bottom:13px}
+.stat-row:last-child{margin-bottom:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;font-size:12px;margin-bottom:6px;gap:8px}
+.stat-name{display:flex;align-items:center;gap:7px;color:#c6c2d6}
+.stat-name i{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+.stat-value{font-weight:800;font-variant-numeric:tabular-nums}
+.stat-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.stat-fill{height:100%;border-radius:99px;transition:width .65s cubic-bezier(.2,.8,.2,1)}
+.side-quote{font-size:11px;line-height:1.65;color:#7c7890;padding:2px 4px;margin:0;border-left:1px solid rgba(139,124,255,.35);padding-left:12px}
+.side-quote b{color:#a9a5ba;font-weight:600}
+
+/* ---------- mini games ---------- */
+.mini-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 14px;flex-wrap:wrap}
+.mini-counter{font-size:12px;color:#b9b5c9;font-weight:700}
+.mini-counter b{color:#fff;font-size:14px}
+.mini-hint{font-size:10px;color:#7c7890}
+.blocks-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;position:relative}
+.block-card{position:relative;text-align:left;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);cursor:pointer;transition:background .25s,border-color .25s,transform .25s;display:flex;gap:10px;align-items:flex-start;min-height:84px;color:var(--text)}
+.block-card:hover{border-color:rgba(139,124,255,.4);background:rgba(124,92,255,.08);transform:translateY(-1px)}
+.block-card.selected{border-color:#8b7cff;background:rgba(124,92,255,.14);box-shadow:inset 0 0 0 1px rgba(139,124,255,.3)}
+.block-icon{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.06);display:grid;place-items:center;flex:none;font-size:14px}
+.block-copy{display:flex;flex-direction:column;gap:3px;padding-right:16px}
+.block-title{font-size:12px;font-weight:800;line-height:1.3}
+.block-desc{font-size:10px;line-height:1.45;color:#8f8ba6}
+.block-check{position:absolute;top:9px;right:9px;width:19px;height:19px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center;font-size:10px;color:transparent;background:transparent;transition:background .2s,border-color .2s,color .2s}
+.block-card.selected .block-check{background:#8b7cff;border-color:#8b7cff;color:#fff}
+
+.candidate-card{position:relative;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);padding:20px;animation:rise .35s both}
+.candidate-card.leaving{animation:cardOut .2s ease forwards}
+.cand-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cand-avatar{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#8b7cff,#4b2fc7);display:grid;place-items:center;font-family:var(--font-display);font-size:18px;font-weight:700;flex:none;box-shadow:0 10px 24px -12px rgba(124,92,255,.9)}
+.cand-name{font-size:18px;font-weight:800;line-height:1.2}
+.cand-role{font-size:11px;color:#8f8ba6;margin-top:2px}
+.cand-count{margin-left:auto;font-size:9px;color:#7c7890;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.cand-summary{font-size:14px;line-height:1.65;color:#c6c2d6;margin:0 0 14px}
+.cand-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tag{padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);font-size:9px;color:#a9a5ba;white-space:nowrap}
+.cand-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cand-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;border-radius:12px;font-size:12px;font-weight:800;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#c6c2d6;transition:background .2s,border-color .2s,transform .2s}
+.cand-btn:hover{transform:translateY(-1px)}
+.cand-btn.reject:hover{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.3);color:#ffb3b3}
+.cand-btn.pick{background:linear-gradient(135deg,#8b7cff,#6847f4);border-color:transparent;color:#fff;box-shadow:0 10px 26px -14px rgba(124,92,255,.9)}
+.cand-btn.pick:hover{box-shadow:0 14px 32px -14px rgba(124,92,255,1)}
+.funnel{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:10px;color:#7c7890}
+.funnel-bar{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.funnel-bar i{display:block;height:100%;background:linear-gradient(90deg,#8b7cff,#c8ff6a);border-radius:99px;transition:width .4s}
+
+.summary-list{display:flex;flex-direction:column;gap:7px;margin:14px 0 18px;position:relative}
+.summary-row{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.summary-row.good{border-color:rgba(200,255,106,.18);background:rgba(200,255,106,.04)}
+.summary-row.bad{border-color:rgba(255,107,107,.18);background:rgba(255,107,107,.04)}
+.summary-mark{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;flex:none;margin-top:1px;background:rgba(255,255,255,.06);color:#8f8ba6}
+.summary-row.good .summary-mark{background:rgba(200,255,106,.14);color:#c8ff6a}
+.summary-row.bad .summary-mark{background:rgba(255,107,107,.14);color:#ff8a8a}
+.summary-name{font-size:11px;font-weight:800;line-height:1.35}
+.summary-note{font-size:10px;line-height:1.5;color:#9a96ad;margin-top:2px}
+.summary-title{font-family:var(--font-display);font-size:18px;letter-spacing:-.02em;margin:0 0 6px}
+.summary-sub{font-size:12px;color:#9a96ad;margin:0 0 6px;line-height:1.55}
+
+/* ---------- result ---------- */
+.result-screen{padding-top:clamp(22px,4vw,44px)}
+.ending-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:center;border-radius:32px;border:1px solid rgba(255,255,255,.1);padding:clamp(26px,4vw,48px);background:linear-gradient(150deg,rgba(30,30,44,.98),rgba(14,14,21,.98));animation:rise .5s both}
+.ending-card::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-170px;top:-220px;background:radial-gradient(circle,rgba(124,92,255,.24),transparent 65%);pointer-events:none}
+.ending-card[data-ending="win"]::before{background:radial-gradient(circle,rgba(200,255,106,.23),transparent 65%)}
+.ending-card[data-ending="mid"]::before{background:radial-gradient(circle,rgba(255,184,107,.22),transparent 65%)}
+.ending-card[data-ending="lose"]::before{background:radial-gradient(circle,rgba(124,92,255,.25),transparent 65%)}
+.ending-copy{position:relative;min-width:0}
+.ending-kicker{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#a9a5ba}
+.ending-title{font-family:var(--font-display);font-size:clamp(34px,5.2vw,62px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 16px;max-width:15ch}
+.ending-lead{font-size:16px;line-height:1.7;color:#c6c2d6;max-width:64ch;margin:0 0 18px}
+.ending-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#e8e6f2}
+.ending-badge i{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px rgba(200,255,106,.7)}
+.ending-card[data-ending="mid"] .ending-badge i{background:var(--orange);box-shadow:0 0 12px rgba(255,184,107,.7)}
+.ending-card[data-ending="lose"] .ending-badge i{background:var(--violet-2);box-shadow:0 0 12px rgba(167,139,250,.7)}
+.score-box{position:relative;display:grid;place-items:center;width:170px;height:170px;flex:none}
+.score-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:7}
+.ring-value{fill:none;stroke:url(#scoreGrad);stroke-width:7;stroke-linecap:round}
+.score-num{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px}
+.score-num b{font-family:var(--font-display);font-size:40px;line-height:1;font-weight:700}
+.score-num span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8f8ba6}
+.ending-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.ending-stat{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.ending-stat .stat-top{margin-bottom:7px}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.review-card{padding:24px;border-radius:24px;background:rgba(20,20,28,.8);border:1px solid var(--line)}
+.review-title{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#a9a5ba;margin:0 0 16px}
+.review-title i{width:7px;height:7px;border-radius:50%;background:var(--lime);flex:none}
+.review-card.bad .review-title i{background:var(--red)}
+.review-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px}
+.review-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55;color:#c6c2d6}
+.review-item>i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:10px;font-style:normal;font-weight:800;margin-top:1px}
+.review-item.good>i{background:rgba(200,255,106,.14);color:#c8ff6a}
+.review-item.bad>i{background:rgba(255,107,107,.14);color:#ff8a8a}
+.ri-label{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c7890;margin-bottom:2px}
+.advice-card{grid-column:1/-1;background:linear-gradient(120deg,rgba(124,92,255,.14),rgba(255,255,255,.02));border-color:rgba(139,124,255,.2)}
+.advice-card p{font-size:14px;line-height:1.65;color:#c6c2d6;margin:0 0 10px}
+.advice-card p:last-child{margin-bottom:0}
+.advice-card p b{color:#fff}
+.author-card{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:24px;align-items:center;margin-top:18px;padding:clamp(24px,4vw,38px);border-radius:30px;border:1px solid rgba(200,255,106,.24);background:linear-gradient(120deg,rgba(124,92,255,.16),rgba(200,255,106,.06) 55%,rgba(255,255,255,.02)),#12121a}
+.author-card::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;right:-120px;bottom:-180px;background:radial-gradient(circle,rgba(200,255,106,.16),transparent 65%);pointer-events:none}
+.author-avatar{width:104px;height:104px;border-radius:28px;background:conic-gradient(from 210deg,#8b7cff,#ff6fa5,#c8ff6a,#8b7cff);display:grid;place-items:center;position:relative;flex:none}
+.author-avatar::before{content:"";position:absolute;inset:3px;border-radius:25px;background:#14141c}
+.author-avatar span{position:relative;font-family:var(--font-display);font-size:26px;font-weight:700;letter-spacing:-.05em}
+.author-kicker{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:6px}
+.author-name{font-family:var(--font-display);font-size:clamp(24px,3vw,34px);letter-spacing:-.04em;margin:0 0 4px;line-height:1.1}
+.author-role{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#a79bff;margin:0 0 10px;font-weight:700}
+.author-text{font-size:13px;line-height:1.65;color:#b9b5c9;max-width:62ch;margin:0}
+.author-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.author-tag{padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:9px;color:#a9a5ba;white-space:nowrap}
+.author-action{position:relative;display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right;flex:none}
+.author-note{font-size:9px;color:#7c7890}
+.author-url{font-size:10px;color:#9a96ad;letter-spacing:.02em}
+.result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.cross-note{font-size:12px;color:#8f8ba6;margin:18px 0 0;line-height:1.6;max-width:72ch}
+.cross-note b{color:#c6c2d6}
+
+/* ---------- footer / toast / confetti ---------- */
+.site-footer{border-top:1px solid rgba(255,255,255,.05);padding:24px 0 34px;color:#8f8ba6;font-size:11px}
+.footer-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.footer-inner p{margin:0}
+.footer-inner a{color:#a9a5ba;text-decoration:none}
+.footer-inner a:hover{color:#fff}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:300;padding:12px 18px;border-radius:999px;background:#1c1c28;border:1px solid rgba(255,255,255,.12);color:#f4f2ff;font-size:13px;font-weight:700;box-shadow:0 20px 50px -20px #000;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confirm-dialog{width:min(440px,calc(100vw - 32px));border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px;background:#14141c;color:var(--text);box-shadow:0 40px 100px -30px #000}
+.confirm-dialog::backdrop{background:rgba(4,4,8,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.confirm-dialog h2{font-family:var(--font-display);font-size:20px;line-height:1.25;letter-spacing:-.02em;margin:0 0 10px}
+.confirm-dialog p{margin:0;color:#c6c2d6;font-size:14px;line-height:1.6}
+.confirm-dialog p b{color:#fff}
+.confirm-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.confirm-actions .btn{flex:1 1 160px}
+.confetti{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-12vh;width:9px;height:13px;border-radius:2px;animation:confettiFall linear forwards}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- animations ---------- */
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,255,106,.45)}50%{box-shadow:0 0 0 7px rgba(200,255,106,0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardOut{to{opacity:0;transform:translateX(26px) scale(.98)}}
+@keyframes confettiFall{0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:1}100%{transform:translate3d(var(--dx),110vh,0) rotate(720deg);opacity:.85}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr;padding-top:30px}
+  .hero-visual{display:none}
+  .roles{grid-template-columns:1fr}
+  .features{grid-template-columns:1fr 1fr}
+  .game-layout{grid-template-columns:1fr}
+  .side-panel{position:static;display:grid;grid-template-columns:1fr 1fr;order:2}
+  .scene-card{min-height:0}
+}
+@media (max-width:700px){
+  .features{grid-template-columns:1fr}
+  .side-panel{grid-template-columns:1fr}
+  .network-panel{display:none}
+  .blocks-grid{grid-template-columns:1fr}
+  .ending-card{grid-template-columns:1fr}
+  .score-box{width:130px;height:130px;justify-self:start}
+  .ending-stats{grid-template-columns:1fr}
+  .review-grid{grid-template-columns:1fr}
+  .advice-card{grid-column:auto}
+  .author-card{grid-template-columns:1fr}
+  .author-action{align-items:flex-start;text-align:left}
+  .author-avatar{width:84px;height:84px;border-radius:22px}
+  .author-avatar::before{border-radius:19px}
+  .author-avatar span{font-size:22px}
+  .footer-inner{flex-direction:column}
+}
+@media (max-width:520px){
+  .wrap{width:calc(100% - 28px)}
+  .site-header{padding:12px 14px}
+  .brand{font-size:16px}
+  .brand-mark{width:42px}
+  .hero h1{font-size:clamp(48px,16vw,68px)}
+  .hero-meta>div{padding-right:14px;margin-right:14px}
+  .hero-meta b{font-size:20px}
+  .choice{padding:14px}
+  .choice-text{font-size:14px}
+  .choice-arrow{display:none}
+  .cand-actions{grid-template-columns:1fr}
+  .result-actions .btn{width:100%}
+  .scene-card{border-radius:24px}
+  .ending-card{border-radius:24px}
+  .author-card{border-radius:24px}
+  .key-hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .orbit,.orbit-node{animation:none}
+}
+</style>
+</head>
+<body class="is-landing">
+<div class="bg" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+<canvas id="net-canvas" aria-hidden="true"></canvas>
+
+<header class="site-header">
+  <a class="brand" href="#" data-action="home"><span class="sr-only">Точка контакта — </span>
+    <svg class="brand-mark" viewBox="0 0 64 26" fill="none" aria-hidden="true">
+      <path d="M2 17C7 9 12 9 17 17C22 25 27 25 32 17C37 9 42 9 47 17C52 25 57 25 62 17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <path d="M2 9C7 1 12 1 17 9C22 17 27 17 32 9C37 1 42 1 47 9C52 17 57 17 62 9" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+    </svg>
+    <span>сетка</span>
+  </a>
+  <div class="header-actions">
+    <button class="icon-btn" id="sound-toggle" data-action="toggle-sound" aria-label="Выключить звук" aria-pressed="true" title="Звук">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+        <path class="sound-wave" d="M16.5 8.5a5 5 0 0 1 0 7"/>
+        <path class="sound-wave" d="M19 6a8.5 8.5 0 0 1 0 12"/>
+        <path class="muted-line" d="M17 9l5 6M22 9l-5 6"/>
+      </svg>
+    </button>
+    <button class="pill-btn header-menu" data-action="home">В меню</button>
+  </div>
+</header>
+
+<div id="app"></div>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>Фан-игра по мотивам Сетки. Не официальный продукт Setka и hh.ru.</p>
+    <p>Сделал <a href="https://bullez.github.io/designer/" target="_blank" rel="noopener">Булат Хайрльварин</a> · 2026</p>
+  </div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="confetti" class="confetti" aria-hidden="true"></div>
+
+<!-- game logic (inline, single-file build) -->
+<script>
+(() => {
+  'use strict';
+
+  /* ------------------------------------------------------------
+     helpers
+  ------------------------------------------------------------ */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const clamp = (n, min = 0, max = 100) => Math.max(min, Math.min(max, n));
+  const app = $('#app');
+  const reduceMotion = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const STORAGE = {
+    save: 'setka.contact.save.v1',
+    meta: 'setka.contact.meta.v1',
+    sound: 'setka.contact.sound'
+  };
+
+  const EFFECT_LABELS = {
+    energy: 'Энергия',
+    fire: 'Огонь',
+    contacts: 'Контакты',
+    time: 'Время',
+    trust: 'Доверие',
+    culture: 'Культура'
+  };
+
+  const ICONS = {
+    seeker: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"/><path d="M18.2 4.4l.9.9M5.8 4.4l-.9.9"/></svg>`,
+    employer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7.5" width="18" height="12" rx="3"/><path d="M9 7.5V5.7A1.7 1.7 0 0 1 10.7 4h2.6A1.7 1.7 0 0 1 15 5.7v1.8"/><path d="M3 12.3h18"/><path d="M9.5 12.3v2h5v-2"/></svg>`
+  };
+
+  const plural = (n, one, few, many) => {
+    const n10 = n % 10;
+    const n100 = n % 100;
+    if (n10 === 1 && n100 !== 11) return one;
+    if (n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return few;
+    return many;
+  };
+
+  /* ------------------------------------------------------------
+     game content
+  ------------------------------------------------------------ */
+  const ROLES = {
+    seeker: {
+      id: 'seeker',
+      label: 'Соискатель',
+      opposite: 'employer',
+      tagline: '47 отказов и один шанс',
+      description: 'Ты устал доказывать, что стоишь большего. Пройди путь от выгоревшего резюме до разговора, в котором тебя слышат.',
+      duration: '5–8 минут',
+      stats: [
+        { key: 'energy', label: 'Энергия', symbol: '⚡', color: '#ffb86b', start: 55 },
+        { key: 'fire', label: 'Огонь', symbol: '✦', color: '#ff6fa5', start: 40 },
+        { key: 'contacts', label: 'Контакты', symbol: '◎', color: '#8b7cff', start: 15 }
+      ],
+      levels: [
+        {
+          kicker: 'Понедельник · 09:41',
+          title: 'Сорок седьмой',
+          intro: [
+            'Ты открываешь почту. Три письма. Два — «мы вам перезвоним». Одно — «к сожалению, выбрали другого кандидата».',
+            'На экране Сетка: бывшие коллеги пишут про офферы, повышения и новые проекты. Ты рад за них. Правда. Почти.'
+          ],
+          prompt: 'С чего начнёшь этот день?',
+          options: [
+            {
+              id: 'a',
+              short: 'Разослать 30 откликов',
+              text: 'Разослать резюме на 30 вакансий. Вдруг повезёт.',
+              quality: -1,
+              effects: { energy: -12, fire: -8 },
+              result: 'Ты отправляешь 30 резюме за 40 минут. Через час приходит первый отказ. Через два — второй. Скорость есть. Направления — нет.'
+            },
+            {
+              id: 'b',
+              short: 'Подогнать резюме под 3 вакансии',
+              text: 'Выбрать три вакансии и подогнать резюме под каждую.',
+              quality: 2,
+              effects: { energy: -6, fire: 10 },
+              result: 'Три вакансии. Три версии резюме. На одну отвечают через 20 минут: «Пришлите портфолио». Это ещё не оффер, но уже не тишина.'
+            },
+            {
+              id: 'c',
+              short: 'Написать коллеге в Сетку',
+              text: 'Написать в Сетку бывшему коллеге: «Привет! Как жизнь?»',
+              quality: 1,
+              effects: { energy: 4, contacts: 14, fire: 4 },
+              result: '«Привет! Как жизнь?» — без просьб и резюме. Через семь минут ответ. Через двадцать — кофе. Через час ты знаешь, что у них открыта роль. Оказывается, люди отвечают людям.'
+            },
+            {
+              id: 'd',
+              short: 'Закрыть ноутбук и отдохнуть',
+              text: 'Закрыть ноутбук и посмотреть сериал.',
+              quality: 0,
+              effects: { energy: 14, fire: -6 },
+              result: 'Ты смотришь четыре серии. Стало легче. Работа не появилась, но дыхание выровнялось. Иногда это тоже шаг — просто не в резюме.'
+            }
+          ]
+        },
+        {
+          type: 'resume',
+          kicker: 'Тот же день · 12:20',
+          title: 'Резюме как визитка',
+          intro: [
+            'Ты открываешь резюме. Оно весит четыре страницы и начинается словами «ответственный, стрессоустойчивый, коммуникабельный». Ты смотришь на это минуту. Потом закрываешь.',
+            'Хорошая новость: у рекрутера есть примерно семь секунд. Плохая: у тебя тоже.'
+          ],
+          prompt: 'Собери резюме, на которое хочется ответить: 4 блока из 9.',
+          blocks: [
+            {
+              id: 'case',
+              icon: '📊',
+              title: 'Кейс с цифрами',
+              desc: 'Сократил подготовку отчёта с 2 часов до 15 минут',
+              quality: 2,
+              effects: { fire: 4 },
+              comment: 'Рекрутер видит результат, а не процесс. Это то, что нужно.'
+            },
+            {
+              id: 'portfolio',
+              icon: '🔗',
+              title: 'Портфолио',
+              desc: '6 проектов: задача → решение → результат',
+              quality: 2,
+              effects: { contacts: 4 },
+              comment: 'Ссылка, которая отвечает на вопрос «что вы умеете» быстрее тебя.'
+            },
+            {
+              id: 'positioning',
+              icon: '🎯',
+              title: 'Короткое позиционирование',
+              desc: 'Кто я, что умею, чем полезен',
+              quality: 1,
+              effects: { energy: 2 },
+              comment: 'Семь секунд на первое впечатление — ты их не потратил зря.'
+            },
+            {
+              id: 'stack',
+              icon: '🧰',
+              title: 'Стек под вакансию',
+              desc: 'SQL, дашборды, A/B — то, что просят в описании',
+              quality: 2,
+              effects: { fire: 6 },
+              comment: 'Совпадение с вакансией — не мелочь. Это причина позвонить.'
+            },
+            {
+              id: 'chronology',
+              icon: '📜',
+              title: 'Полная хронология',
+              desc: 'Все места работы с 2011 года, по пять строк на каждое',
+              quality: -1,
+              effects: { energy: -4 },
+              comment: 'Опыт — плюс, но 15 лет в одном списке читаются как 15 лет. Сократи до релевантного.'
+            },
+            {
+              id: 'buzz',
+              icon: '🗣️',
+              title: 'Ключевые качества',
+              desc: 'Стрессоустойчивость, коммуникабельность, ответственность',
+              quality: -1,
+              effects: { fire: -4 },
+              comment: 'Это не навыки, а гороскоп. Замени на доказательства.'
+            },
+            {
+              id: 'vacation',
+              icon: '🏖️',
+              title: 'Фото с отпуска',
+              desc: 'Яркое, на фоне моря, в шортах',
+              quality: -2,
+              effects: { fire: -6, contacts: -2 },
+              comment: 'Ты выглядишь счастливым. Но рекрутер ищет не отпуск.'
+            },
+            {
+              id: 'hobby',
+              icon: '🪐',
+              title: 'Хобби',
+              desc: 'Космос, уфология и немного магии',
+              quality: 0,
+              effects: { fire: 2 },
+              comment: 'Человечность — хорошо. Но она не заменяет кейс.'
+            },
+            {
+              id: 'refs',
+              icon: '🤝',
+              title: 'Рекомендации',
+              desc: 'Два контакта, которые подтвердят результаты',
+              quality: 1,
+              effects: { contacts: 6 },
+              comment: 'Живые люди, которые скажут о тебе лучше, чем «ответственный».'
+            }
+          ]
+        },
+        {
+          kicker: 'Среда · 18:05',
+          title: 'Одно сообщение',
+          intro: [
+            'В Сетке — пост Марины, тимлида аналитики: «Ищем человека в команду. Без души не писать». Под постом 40 комментариев.',
+            'У тебя одно сообщение.'
+          ],
+          prompt: 'Что напишешь?',
+          options: [
+            {
+              id: 'a',
+              short: '«Здравствуйте! Отправляю резюме»',
+              text: '«Здравствуйте! Отправляю резюме. Буду рад любому ответу».',
+              quality: 0,
+              effects: { contacts: 2, fire: -2 },
+              result: 'Марина открывает. Резюме — четыре страницы. Она закрывает. Не потому что ты плохой. Потому что таких сообщений у неё 87.'
+            },
+            {
+              id: 'b',
+              short: 'Кейс в трёх строках',
+              text: '«Марина, привет! Увидел пост. У меня был похожий кейс — вот ссылка, три строки, без воды».',
+              quality: 2,
+              effects: { contacts: 18, fire: 8 },
+              result: 'Ответ через 12 минут: «О, живой человек. Давайте в среду?» Ты перечитываешь сообщение три раза. Это не отказ. Это дверь.'
+            },
+            {
+              id: 'c',
+              short: '«А какие условия?»',
+              text: '«А какие у вас условия?»',
+              quality: 1,
+              effects: { contacts: 4 },
+              result: 'Марина: «А какие у вас?» Диалог начался. Пока это диалог двух вопросов, но это уже больше, чем тишина.'
+            },
+            {
+              id: 'd',
+              short: 'Напомнить о прошлом сообщении',
+              text: '«Вы не ответили на прошлое сообщение. Я жду».',
+              quality: -2,
+              effects: { contacts: -8, fire: -8 },
+              result: 'Марина ставит «прочитано». Больше ничего. Иногда правота не помогает.'
+            }
+          ]
+        },
+        {
+          kicker: 'Среда · 14:00',
+          title: 'Расскажите о себе',
+          intro: [
+            'Zoom. На том конце Марина и человек без камеры. У тебя 40 минут, чтобы перестать быть строчкой в резюме.'
+          ],
+          steps: [
+            {
+              speaker: 'Марина',
+              avatar: 'М',
+              question: '— Расскажите о себе.',
+              prompt: 'Твой ответ:',
+              options: [
+                {
+                  id: 'a',
+                  short: 'Начать с биографии',
+                  text: '«Ну, я родился в…» — и дальше по хронологии.',
+                  quality: -1,
+                  effects: { fire: -5 },
+                  result: 'На четвёртой минуте человек без камеры начинает рисовать. Ты не заметил, как дошёл до школы. Марина вежливо кивает.'
+                },
+                {
+                  id: 'b',
+                  short: '20 секунд о результате',
+                  text: '«Я аналитик с пятью годами опыта. Последний год строил дашборды для маркетинга: сократил подготовку отчётов с двух дней до двух часов. Ищу команду, где можно влиять на решения, а не только на цифры».',
+                  quality: 2,
+                  effects: { fire: 10, contacts: 5 },
+                  result: 'Марина кивает. Человек без камеры перестаёт рисовать. Ты попал в первые 20 секунд.'
+                },
+                {
+                  id: 'c',
+                  short: '«В резюме всё написано»',
+                  text: '«В резюме всё написано».',
+                  quality: -1,
+                  effects: { fire: -6 },
+                  result: 'Марина: «Да, но мне хочется услышать вас». Пауза. Ты слышишь, как тикают часы в чужой квартире.'
+                },
+                {
+                  id: 'd',
+                  short: 'Признаться, что устал',
+                  text: '«Я устал искать работу, если честно».',
+                  quality: 1,
+                  effects: { energy: -4, fire: -2, contacts: 2 },
+                  result: 'Марина: «Понимаю. Рынок сейчас странный». Впервые за день кто-то не делает вид, что всё легко. Ты не провалился — ты стал человеком.'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          kicker: 'Среда · 14:26',
+          title: 'Неудобные вопросы',
+          intro: [
+            'Разговор идёт легче. И именно поэтому Марина задаёт вопрос, к которому ты готовился всю неделю.'
+          ],
+          steps: [
+            {
+              speaker: 'Марина',
+              avatar: 'М',
+              question: '— Почему вы ушли с прошлой работы?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Начальник был токсичным»',
+                  text: '«Начальник был токсичным. Не хочу повторять».',
+                  quality: 0,
+                  effects: { fire: -3 },
+                  result: 'Марина: «А что было бы иначе у нас?» Ты не был готов. Но честность — не худший старт.'
+                },
+                {
+                  id: 'b',
+                  short: '«Хочу расти, а там был потолок»',
+                  text: '«Хочу расти в продуктовой аналитике, а там был только отчётный контур. Вот почему ваша роль мне интересна».',
+                  quality: 2,
+                  effects: { fire: 5 },
+                  result: 'Ты не обвиняешь бывшую компанию — говоришь о цели. Марина записывает: «мотивация — ок».'
+                },
+                {
+                  id: 'c',
+                  short: '«Меня сократили»',
+                  text: '«Меня сократили».',
+                  quality: 1,
+                  effects: { fire: 2, energy: -2 },
+                  result: 'Марина: «Спасибо, что говорите прямо». Ты выдыхаешь. Это не клеймо, это рынок.'
+                },
+                {
+                  id: 'd',
+                  short: '«Можно не отвечать?»',
+                  text: '«А можно не отвечать?»',
+                  quality: -1,
+                  effects: { fire: -4 },
+                  result: 'Можно. Но вопросы не исчезают от того, что мы их пропускаем.'
+                }
+              ]
+            },
+            {
+              speaker: 'Человек без камеры',
+              avatar: '?',
+              question: '— Назовите свою слабую сторону. Настоящую.',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Перфекционизм»',
+                  text: '«Перфекционизм. Иногда слишком долго довожу до идеала».',
+                  quality: -1,
+                  effects: { fire: -2 },
+                  result: 'Марина улыбается: «Классика». Человек без камеры впервые подаёт голос: «А можно настоящую?»'
+                },
+                {
+                  id: 'b',
+                  short: '«Плохо прошу о помощи»',
+                  text: '«Плохо прошу о помощи. Держу задачу до последнего, когда стоит позвать коллегу. Работаю с этим: в прошлом проекте договорился о чек-инах по средам».',
+                  quality: 2,
+                  effects: { fire: 6, contacts: 2 },
+                  result: 'Марина: «Это решаемо». Ты впервые говоришь о слабости без ощущения, что сдаёшь экзамен.'
+                },
+                {
+                  id: 'c',
+                  short: '«У меня нет слабых сторон»',
+                  text: '«У меня нет слабых сторон».',
+                  quality: -2,
+                  effects: { fire: -4 },
+                  result: 'Тишина. Человек без камеры что-то печатает. Возможно, «нет».'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          kicker: 'Пятница · 11:10',
+          title: 'Оффер и звёздочка',
+          intro: [
+            'Через день — письмо: «Мы готовы предложить». В письме вилка на 15% ниже ожиданий.',
+            'И ещё: «Тестовое нужно до воскресенья, выйти — в понедельник».'
+          ],
+          steps: [
+            {
+              speaker: 'Марина',
+              avatar: 'М',
+              question: '— Как вам предложение?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Согласен на всё»',
+                  text: '«Согласен на всё, спасибо!»',
+                  quality: -1,
+                  effects: { fire: -5, energy: -3 },
+                  result: 'Ты согласился за восемь секунд. Они не успели даже дописать: «Если что, мы готовы обсуждать».'
+                },
+                {
+                  id: 'b',
+                  short: 'Обсудить вилку с аргументами',
+                  text: '«Спасибо за оффер! Мне важно обсудить вилку: по рынку моя роль стоит X. Могу показать, что принесу».',
+                  quality: 2,
+                  effects: { fire: 8, energy: -2 },
+                  result: 'Марина: «Давайте созвонимся». Через день вилка +10%. Не потому что ты наглый, а потому что ты разговаривал.'
+                },
+                {
+                  id: 'c',
+                  short: '«Это же мало»',
+                  text: '«Вы серьёзно? Это же мало».',
+                  quality: -1,
+                  effects: { fire: -2, contacts: -4 },
+                  result: 'Ответ приходит через два дня. Тон официальный. Оффер ещё жив, но теперь он пахнет обидой.'
+                }
+              ]
+            },
+            {
+              speaker: 'Марина',
+              avatar: 'М',
+              question: '— Тестовое до воскресенья. Выход в понедельник. Успеете?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: 'Сделать всё за выходные',
+                  text: '«Да, сделаю всё за выходные».',
+                  quality: 0,
+                  effects: { energy: -15, fire: -4 },
+                  result: 'Ты сделал. Вышел в понедельник. И уже устал до старта. Так начинается выгорание, которое никто не заметит.'
+                },
+                {
+                  id: 'b',
+                  short: 'Попросить 4 дня и оплату',
+                  text: '«Готов сделать тестовое, но давайте четыре дня и оплачиваемое — иначе это не тестовое, а работа».',
+                  quality: 2,
+                  effects: { fire: 8, energy: 2 },
+                  result: 'Марина: «Справедливо». Задание сокращают, срок дают. Ты уважаешь своё время — и они начинают уважать его тоже.'
+                },
+                {
+                  id: 'c',
+                  short: 'Пропустить тестовое',
+                  text: '«Пропущу тестовое, и так всё понятно».',
+                  quality: -1,
+                  effects: { contacts: -2 },
+                  result: 'Марина: «Тогда, к сожалению, не сможем». Это не конец. Но дверь стала чуть тяжелее.'
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      endings: {
+        win: {
+          badge: 'Оффер мечты',
+          title: 'Оффер. И это только начало.',
+          lead: 'Ты получил предложение. Не потому что стал идеальным — потому что перестал рассылать себя всем подряд и начал выбирать. В понедельник — первый день. А в воскресенье, пожалуйста, ничего не делай.',
+          next: 'Ты не выиграл лотерею — ты построил разговор. В первый день найди человека, у которого можно спросить «а как тут принято». Это сэкономит месяцы.'
+        },
+        mid: {
+          badge: 'Компромисс',
+          title: 'Оффер со звёздочкой.',
+          lead: 'Тебе предлагают роль, но условия — не те, о которых ты мечтал: вилка ниже, задач больше, команда в переходном периоде. Ты берёшь время подумать. Это не слабость. Это взрослый разговор с собой.',
+          next: 'Соглашайся только на то, что сможешь объяснить себе через год. Если не можешь — попроси время и задай вопросы. Оффер — это не финал, а начало договора.'
+        },
+        lose: {
+          badge: 'Честный финал',
+          title: 'Пока не в этот раз.',
+          lead: 'Оффера нет. Есть 47 отказов, два живых контакта и понимание, что дело не в твоей ценности. Иногда рынок — это просто рынок. Отдохни. Перепиши резюме. Напиши тому, кто ответил. Следующая дверь не обязана быть последней.',
+          next: 'Сделай паузу на 48 часов. Потом выбери три вакансии и три контакта. Не 30 откликов — три разговора. И перепиши резюме так, будто его читает уставший человек. Потому что так и есть.'
+        }
+      }
+    },
+
+    employer: {
+      id: 'employer',
+      label: 'Наниматель',
+      opposite: 'seeker',
+      tagline: '300 резюме и ни одного идеального',
+      description: 'Ты тонешь в откликах и не успеваешь думать. Собери команду, не потеряв себя и людей.',
+      duration: '5–8 минут',
+      stats: [
+        { key: 'time', label: 'Время', symbol: '◷', color: '#ffb86b', start: 60 },
+        { key: 'trust', label: 'Доверие', symbol: '◇', color: '#8b7cff', start: 45 },
+        { key: 'culture', label: 'Культура', symbol: '✧', color: '#c8ff6a', start: 40 }
+      ],
+      levels: [
+        {
+          kicker: 'Понедельник · 10:02',
+          title: 'Вакансия',
+          intro: [
+            'Тебе нужно закрыть роль продуктного аналитика. На почте — 300 откликов. В календаре — четыре встречи и один дедлайн.',
+            'Ты открываешь редактор вакансии.'
+          ],
+          prompt: 'Что напишешь?',
+          options: [
+            {
+              id: 'a',
+              short: '15 требований и «до 30 лет»',
+              text: '15 требований, 10 лет опыта, знание всего. И возраст до 30.',
+              quality: -2,
+              effects: { time: 8, culture: -6 },
+              result: 'Ты получаешь 300 откликов. 280 — нерелевантные, 20 — испуганные. Воронка начинается с фильтра «кто не испугался».'
+            },
+            {
+              id: 'b',
+              short: 'Задачи, команда, вилка, 3 критерия',
+              text: 'Задачи, команда, вилка и три главных критерия. Без «стрессоустойчивости».',
+              quality: 2,
+              effects: { time: -5, trust: 8, culture: 8 },
+              result: 'Откликов меньше — 90. Зато в каждом втором есть релевантный опыт. Ты впервые читаешь резюме без желания закрыть ноутбук.'
+            },
+            {
+              id: 'c',
+              short: '«Ищем единорога»',
+              text: '«Ищем единорога: аналитик + дизайнер + немного Python. Зарплата по итогам собеседования».',
+              quality: -2,
+              effects: { time: -10, culture: -8 },
+              result: 'Приходят два кандидата. Один умеет всё, но хочет должность тимлида. Второй — просто любопытный. Ты смотришь на вилку и понимаешь: единорог тоже хочет есть.'
+            },
+            {
+              id: 'd',
+              short: 'Скопировать вакансию конкурента',
+              text: 'Скопировать вакансию конкурента, заменив название компании.',
+              quality: -1,
+              effects: { culture: -4 },
+              result: 'Кандидаты приходят и спрашивают: «А вы правда как они?» Ты не знаешь, что ответить.'
+            }
+          ]
+        },
+        {
+          type: 'sort',
+          kicker: 'Понедельник · 11:40',
+          title: '300 → 6',
+          intro: [
+            'Ты фильтруешь отклики. Через час остаётся шесть резюме. Шесть человек, с которыми можно поговорить.',
+            'Но время — не резиновое.'
+          ],
+          prompt: 'Кого берём в шортлист? Смотри на доказательства, а не на упаковку.',
+          candidates: [
+            {
+              name: 'Аня',
+              age: 26,
+              role: 'Аналитик в ритейле · 3 года',
+              summary: 'Собрала дашборд, который сократил подготовку отчётов с двух дней до двух часов. В резюме опечатка в слове «аналитика».',
+              tags: ['Retail', 'SQL', 'Дашборды'],
+              good: true,
+              note: 'Опечатка — не приговор. Результат важнее.'
+            },
+            {
+              name: 'Ксения',
+              age: 29,
+              role: 'Аналитик · 2 года курсов',
+              summary: 'Идеальное резюме на две страницы: все ключевые слова, курсы, сертификаты. В портфолио — только скриншоты учебных проектов.',
+              tags: ['Курсы', 'Certified', 'Без кейсов'],
+              good: false,
+              note: 'Красивое резюме без доказательств. На собеседовании будет сложно.'
+            },
+            {
+              name: 'Тимур',
+              age: 41,
+              role: 'Инженер → аналитик · 2 года',
+              summary: '12 лет инженером, два года назад переучился на аналитика. GitHub с тремя пет-проектами, один — с реальными пользователями. Профильного диплома нет.',
+              tags: ['Career switch', 'GitHub', 'Pet projects'],
+              good: true,
+              note: 'Смена профессии — не риск. Риск — не проверить, что человек уже сделал.'
+            },
+            {
+              name: 'Артём',
+              age: 30,
+              role: 'Аналитик · «готов на всё»',
+              summary: 'Резюме на 12 страниц, фото в костюме, «готов на всё». Ни одного кейса, зарплата «по договорённости», готов выйти вчера.',
+              tags: ['12 страниц', 'Без кейсов'],
+              good: false,
+              note: '«Готов на всё» — не ответ на вопрос «что вы умеете».'
+            },
+            {
+              name: 'Света',
+              age: 35,
+              role: 'Аналитик · 6 лет + пауза',
+              summary: 'Шесть лет аналитиком, потом четыре года пауза — декрет. Прошла курс по продуктовой аналитике, готова на part-time. В резюме честно указан перерыв.',
+              tags: ['6 лет опыта', 'Перерыв', 'Part-time'],
+              good: true,
+              note: 'Перерыв — не минус к квалификации. Спроси, что она делала и чему научилась.'
+            },
+            {
+              name: 'Олег',
+              age: 38,
+              role: 'Руководитель аналитики · 12 лет',
+              summary: '12 лет в одной компании, дорос до руководителя. Последние три года не писал SQL, но готов вернуться. Просит вилку ниже рынка.',
+              tags: ['Руководитель', 'Без SQL 3 года'],
+              good: false,
+              note: 'Сильный кандидат, но не для роли, где нужно писать SQL руками. Это не отказ человеку — это несовпадение с задачей.'
+            }
+          ]
+        },
+        {
+          kicker: 'Вторник · 12:15',
+          title: 'Прочитано',
+          intro: [
+            'Тимур прочитал сообщение два дня назад и молчит. Аня ответила сразу. Света спрашивает, возможна ли удалёнка.',
+            'У тебя 20 минут между встречами.'
+          ],
+          prompt: 'Кому и что напишешь?',
+          options: [
+            {
+              id: 'a',
+              short: '«Вы получили моё сообщение?»',
+              text: '«Вы получили моё сообщение?»',
+              quality: -1,
+              effects: { trust: -4 },
+              result: 'Тимур: «Да». Больше ничего. Ты чувствуешь себя коллектором.'
+            },
+            {
+              id: 'b',
+              short: 'Дать Тимуру право не отвечать',
+              text: '«Тимур, понимаю, что может быть занято. Если роль неактуальна — просто скажите, закрою вопрос. Если актуальна, пришлю детали в удобном формате».',
+              quality: 2,
+              effects: { trust: 8, time: 4 },
+              result: 'Ответ через час: «Извините, завал. Актуальна. Давайте в четверг». Уважение к чужому времени экономит твоё.'
+            },
+            {
+              id: 'c',
+              short: 'Позвонить три раза подряд',
+              text: 'Позвонить три раза подряд.',
+              quality: -2,
+              effects: { trust: -8, time: -4 },
+              result: 'Тимур не берёт. На третий звонок отвечает: «Я на совещании». Ты слышишь в голосе то, что скоро услышишь в отзыве о компании.'
+            },
+            {
+              id: 'd',
+              short: 'Забыть и двигаться дальше',
+              text: 'Забыть и двигаться дальше.',
+              quality: -1,
+              effects: { time: 4 },
+              result: 'Ты закрываешь вкладку. Через неделю Тимур пишет сам: «Извините, выпал». Но место уже занято. Иногда одно сообщение — это вся разница.'
+            }
+          ]
+        },
+        {
+          kicker: 'Четверг · 16:30',
+          title: 'Вопросы на миллион',
+          intro: [
+            'Собеседования идут одно за другим. Ты устал, но держишь лицо.',
+            'И тут кандидаты задают вопросы, от которых не отмахнёшься.'
+          ],
+          steps: [
+            {
+              speaker: 'Света',
+              avatar: 'С',
+              question: '— У вас в команде бывают переработки?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Все горят, но мы любим дело»',
+                  text: '«У нас все горят, но мы любим своё дело».',
+                  quality: -1,
+                  effects: { trust: -6, culture: -6 },
+                  result: 'Света вежливо улыбается. В её резюме — шесть лет опыта и один выгоревший проект. Она умеет слышать правду между строк.'
+                },
+                {
+                  id: 'b',
+                  short: '«Бывают пики, но мы их планируем»',
+                  text: '«Бывают пики, но мы планируем их заранее и даём отгулы. Вот как это было в прошлом квартале».',
+                  quality: 2,
+                  effects: { trust: 8, culture: 6 },
+                  result: 'Света: «Спасибо за конкретику». Впервые за встречу она подаётся вперёд.'
+                },
+                {
+                  id: 'c',
+                  short: '«Вы работать или спрашивать?»',
+                  text: '«А вы готовы работать или только спрашивать?»',
+                  quality: -2,
+                  effects: { trust: -10, culture: -8 },
+                  result: 'Света: «Кажется, мы друг другу не подходим». Она права. И это лучше, чем узнать это через три месяца.'
+                }
+              ]
+            },
+            {
+              speaker: 'Тимур',
+              avatar: 'Т',
+              question: '— Я меняю профессию. Вы не считаете это риском?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Все меняют профессию»',
+                  text: '«Все меняют профессию, это нормально».',
+                  quality: 0,
+                  effects: { trust: 3 },
+                  result: 'Тимур кивает, но не верит. Общие слова не снимают риск.'
+                },
+                {
+                  id: 'b',
+                  short: '«Считаю. Поэтому — испытательный срок с критериями»',
+                  text: '«Считаю. Поэтому предлагаю оплачиваемый испытательный срок с понятными критериями: три задачи, два месяца, ментор. Если не сходится — расходимся без обид».',
+                  quality: 2,
+                  effects: { trust: 10, culture: 5, time: -4 },
+                  result: 'Тимур: «Вот это честно». Ты не обещаешь, что всё будет легко. Ты обещаешь, что будет ясно.'
+                },
+                {
+                  id: 'c',
+                  short: '«Главное — желание»',
+                  text: '«Ну, главное — желание».',
+                  quality: -1,
+                  effects: { trust: -2 },
+                  result: 'Тимур улыбается. Желание — не план. Через неделю он принимает другой оффер.'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          kicker: 'Пятница · 19:05',
+          title: 'Контр-оффер',
+          intro: [
+            'Тимур получил оффер от другой компании. Просит +20% и должность senior. Бюджет не резиновый.',
+            'Ты смотришь на цифры и понимаешь: решение придётся объяснять не только ему.'
+          ],
+          prompt: 'Что предложишь?',
+          options: [
+            {
+              id: 'a',
+              short: 'Дать +20%, лишь бы не ушёл',
+              text: 'Дать +20%, лишь бы не ушёл.',
+              quality: -1,
+              effects: { time: 2, culture: -4 },
+              result: 'Он остаётся. Через четыре месяца просит ещё +20%. Ты понимаешь, что купил лояльность, а не решил вопрос.'
+            },
+            {
+              id: 'b',
+              short: 'Грейд senior через 6 месяцев по критериям',
+              text: '«Вилка фиксирована. Но могу предложить грейд senior через шесть месяцев по прозрачным критериям, ментора и бюджет на обучение».',
+              quality: 2,
+              effects: { trust: 8, culture: 8, time: -2 },
+              result: 'Тимур думает два дня. Принимает. Не из-за денег, а из-за ясности. Иногда люди уходят не от зарплаты, а от неопределённости.'
+            },
+            {
+              id: 'c',
+              short: '«Ок, тогда пока»',
+              text: '«Ок, тогда пока».',
+              quality: -1,
+              effects: { time: 6 },
+              result: 'Ты закрываешь ноутбук. Роль открыта ещё три месяца. Ты считаешь, что сэкономил время. Команда считает иначе.'
+            },
+            {
+              id: 'd',
+              short: 'Пообещать senior, а там разберёмся',
+              text: 'Пообещать senior сейчас, а там разберёмся.',
+              quality: -2,
+              effects: { trust: -6, culture: -6 },
+              result: 'Через полгода он напоминает. Ты не помнишь. Он помнит. Доверие — это то, что нельзя пообещать дважды.'
+            }
+          ]
+        },
+        {
+          kicker: 'Через месяц · 10:00',
+          title: 'Первый день и первый месяц',
+          intro: [
+            'Тимур вышел. У него есть ноутбук, доступы и лёгкая паника в глазах.',
+            'У тебя — план, команда и полчаса до следующей встречи.'
+          ],
+          steps: [
+            {
+              speaker: 'Тимур',
+              avatar: 'Т',
+              question: '— С чего начнём?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Разберёшься, ты же senior»',
+                  text: '«Разберёшься, ты же senior».',
+                  quality: -1,
+                  effects: { trust: -6, culture: -4 },
+                  result: 'Через неделю он спрашивает, где лежат доступы. Через месяц — ищет другую работу.'
+                },
+                {
+                  id: 'b',
+                  short: 'План 30/60/90, buddy и первый результат',
+                  text: 'Подготовить план на 30/60/90 дней, buddy, встречу с командой и маленький результат к пятнице.',
+                  quality: 2,
+                  effects: { trust: 10, culture: 8, time: -6 },
+                  result: 'К пятнице Тимур закрывает первую задачу. Он ещё не всё знает, но уже понимает, зачем пришёл. Это и есть онбординг.'
+                },
+                {
+                  id: 'c',
+                  short: 'Тимбилдинг с квизом',
+                  text: 'Устроить тимбилдинг с квизом.',
+                  quality: 0,
+                  effects: { trust: 2, culture: 2, time: -2 },
+                  result: 'Весело. Но на второй день он всё ещё не знает, где лежат доступы. Квиз не заменяет контекст.'
+                }
+              ]
+            },
+            {
+              speaker: 'Тимур',
+              avatar: 'Т',
+              question: '— Я переоценил силы. Мне нужно больше поддержки.',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Мы же договаривались»',
+                  text: '«Мы же договаривались».',
+                  quality: -1,
+                  effects: { trust: -8, culture: -4 },
+                  result: 'Он больше не придёт с этим. Придёт с заявлением.'
+                },
+                {
+                  id: 'b',
+                  short: '«Спасибо, что сказал. Скорректируем план»',
+                  text: '«Спасибо, что сказал. Давай разберём, где именно нужна поддержка, и скорректируем план».',
+                  quality: 2,
+                  effects: { trust: 10, culture: 8 },
+                  result: 'Вы переписываете план. Он остаётся. Не потому что идеален, а потому что его услышали. Это дешевле, чем новый поиск.'
+                },
+                {
+                  id: 'c',
+                  short: '«Возьми отпуск, всё пройдёт»',
+                  text: '«Возьми отпуск, всё пройдёт».',
+                  quality: 0,
+                  effects: { trust: -2, culture: -2 },
+                  result: 'Отпуск помогает от усталости, но не от неясных ожиданий. Через две недели он возвращается к тому же.'
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      endings: {
+        win: {
+          badge: 'Идеальный найм',
+          title: 'Команда собрана.',
+          lead: 'Тимур закрыл первый квартал. Аня выросла до senior. Света вышла на четыре дня в неделю и не выгорела. Ты не нанял идеального кандидата. Ты создал условия, в которых человек стал хорошим.',
+          next: 'Твой главный результат — не закрытая вакансия, а ясность. Запиши, что именно сработало в онбординге, и повтори в следующий раз.'
+        },
+        mid: {
+          badge: 'Компромисс',
+          title: 'Найм со звёздочкой.',
+          lead: 'Роль закрыта. Тимур вышел, но через полгода ушёл. Ты успел сделать продукт, но не успел сделать среду. В следующий раз начни с онбординга, а не с оффера.',
+          next: 'Проверь, где потерялось доверие: в вакансии, в первом сообщении или в первом месяце. Обычно ответ очевиден, если спросить у кандидата.'
+        },
+        lose: {
+          badge: 'Честный финал',
+          title: 'Вакансия всё ещё открыта.',
+          lead: '300 резюме, четыре месяца, ноль офферов. Ты искал единорога и пропустил людей. Это не провал. Это данные. Перепиши вакансию, вернись к короткому списку и начни с одного разговора.',
+          next: 'Начни не с воронки, а с вопроса: что этот человек должен сделать в первые 90 дней? Ответ превратится в критерии, вакансию и вопросы на собеседовании.'
+        }
+      }
+    }
+  };
+
+  /* ------------------------------------------------------------
+     scoring helpers
+  ------------------------------------------------------------ */
+  function computeMaxQuality(role) {
+    let max = 0;
+    role.levels.forEach((level) => {
+      if (level.type === 'resume') {
+        const top = level.blocks
+          .map((b) => b.quality)
+          .sort((a, b) => b - a)
+          .slice(0, 4);
+        max += top.reduce((sum, q) => sum + Math.max(0, q), 0);
+      } else if (level.type === 'sort') {
+        max += level.candidates.length;
+      } else {
+        const steps = level.steps || [level];
+        steps.forEach((step) => {
+          max += Math.max(0, ...step.options.map((o) => o.quality));
+        });
+      }
+    });
+    return max;
+  }
+
+  Object.values(ROLES).forEach((role) => {
+    role.maxQuality = computeMaxQuality(role);
+  });
+
+  function calculateScore(role, snapshot) {
+    const q = clamp(snapshot.quality / role.maxQuality, 0, 1);
+    const avg = role.stats.reduce((sum, stat) => sum + (snapshot.stats[stat.key] || 0), 0) / role.stats.length;
+    return Math.round(clamp(10 + 45 * q + 40 * (avg / 100), 0, 100));
+  }
+
+  function decisionBadge(q) {
+    if (q >= 2) return { label: 'Сильный ход', tone: 'great' };
+    if (q === 1) return { label: 'Хороший ход', tone: 'good' };
+    if (q === 0) return { label: 'Нейтральный ход', tone: 'neutral' };
+    return { label: 'Слабый ход', tone: 'bad' };
+  }
+
+  function resumeBadge(q) {
+    if (q >= 5) return { label: 'Сильное резюме', tone: 'great' };
+    if (q >= 3) return { label: 'Рабочее резюме', tone: 'good' };
+    if (q >= 1) return { label: 'Слабое резюме', tone: 'neutral' };
+    return { label: 'Мимо', tone: 'bad' };
+  }
+
+  function sortBadge(correct, total) {
+    if (correct >= total - 1) return { label: 'Точный отбор', tone: 'great' };
+    if (correct >= Math.ceil(total / 2)) return { label: 'Рабочий шортлист', tone: 'good' };
+    if (correct >= 1) return { label: 'Спорный шортлист', tone: 'neutral' };
+    return { label: 'Мимо', tone: 'bad' };
+  }
+
+  function resumeOutcome(q) {
+    if (q >= 5) return 'Резюме ушло. Через день — ответ: «Интересно. Давайте поговорим». Впервые за месяц ты не хочешь перечитать отправленное и удалить.';
+    if (q >= 3) return 'Резюме ушло. Ответ приходит через три дня: «Пришлите пару примеров». Не идеально, но разговор начался.';
+    if (q >= 1) return 'Резюме ушло. Тишина. Возможно, дело не в тебе, а в том, что рекрутер не увидел главного. Попробуй ещё раз — с цифрами.';
+    return 'Резюме ушло. Через день — отказ. Обидно. Но теперь ты знаешь, что упаковка важнее, чем кажется. В следующей попытке начни с кейса.';
+  }
+
+  function sortOutcome(correct, total, decisions) {
+    const missed = decisions.filter((d) => d.good && !d.shortlist).length;
+    const extra = decisions.filter((d) => !d.good && d.shortlist).length;
+    if (correct === total) {
+      return 'Идеально. Ты увидел потенциал там, где другие видят пробел, и не купился на красивую упаковку.';
+    }
+    if (missed === 0 && extra === 0) {
+      return 'Ты не потерял ни одного сильного кандидата. Один лишний человек в шортлисте — не проблема: разговор всё покажет.';
+    }
+    if (missed > 0 && extra > 0) {
+      return `Ты пропустил ${missed} ${plural(missed, 'сильного кандидата', 'сильных кандидатов', 'сильных кандидатов')} и добавил ${extra} ${plural(extra, 'человека', 'человек', 'человек')} без доказательств. Упаковка сработала против тебя в обе стороны.`;
+    }
+    if (missed > 0) {
+      return `Ты пропустил ${missed} ${plural(missed, 'сильного кандидата', 'сильных кандидатов', 'сильных кандидатов')}. Возможно, из-за опечатки, пробела или непривычного пути в профессию. Стоит вернуться к ним.`;
+    }
+    return `В шортлист попали ${extra} ${plural(extra, 'человек', 'человека', 'человек')} без доказательств. Красивое резюме — не то же самое, что результат.`;
+  }
+
+  /* ------------------------------------------------------------
+     storage / meta
+  ------------------------------------------------------------ */
+  function readJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writeJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function getMeta() {
+    const meta = readJSON(STORAGE.meta, {});
+    return {
+      seeker: meta.seeker || null,
+      employer: meta.employer || null,
+      both: Boolean(meta.both)
+    };
+  }
+
+  function saveMeta(meta) {
+    writeJSON(STORAGE.meta, meta);
+  }
+
+  function getSave() {
+    const saved = readJSON(STORAGE.save, null);
+    if (!saved || saved.version !== 1) return null;
+    const role = ROLES[saved.mode];
+    if (!role) return null;
+    if (typeof saved.levelIndex !== 'number' || saved.levelIndex >= role.levels.length) return null;
+    return saved;
+  }
+
+  function persist() {
+    if (!state) return;
+    state.savedAt = Date.now();
+    writeJSON(STORAGE.save, state);
+  }
+
+  function clearSave() {
+    try {
+      localStorage.removeItem(STORAGE.save);
+    } catch (error) {
+      /* ignore */
+    }
+  }
+
+  function timeAgo(timestamp) {
+    if (!timestamp) return 'недавно';
+    const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60000));
+    if (minutes < 1) return 'только что';
+    if (minutes < 60) return `${minutes} мин назад`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} ч назад`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'вчера';
+    return `${days} дн назад`;
+  }
+
+  /* ------------------------------------------------------------
+     global state
+  ------------------------------------------------------------ */
+  let screen = 'landing';
+  let state = null;
+  let lastResult = null;
+  let soundOn = true;
+  let busy = false;
+
+  try {
+    soundOn = localStorage.getItem(STORAGE.sound) !== 'off';
+  } catch (error) {
+    soundOn = true;
+  }
+
+  function currentLevel() {
+    return state ? ROLES[state.mode].levels[state.levelIndex] : null;
+  }
+
+  function currentStep() {
+    const level = currentLevel();
+    if (!level) return null;
+    return level.steps ? level.steps[state.stepIndex] : level;
+  }
+
+  function initLevelMini() {
+    if (!state) return;
+    const level = currentLevel();
+    if (level && level.type === 'resume') {
+      state.mini = { selected: [] };
+    } else if (level && level.type === 'sort') {
+      state.mini = { index: 0, decisions: [] };
+    } else {
+      state.mini = null;
+    }
+  }
+
+  function requestStart(mode) {
+    const saved = getSave();
+    if (!saved) {
+      startGame(mode);
+      return;
+    }
+    confirmStart(mode, saved).then((confirmed) => {
+      if (confirmed) startGame(mode);
+    });
+  }
+
+  function confirmStart(mode, saved) {
+    return new Promise((resolve) => {
+      const savedRole = ROLES[saved.mode];
+      const sameMode = saved.mode === mode;
+      const nextRole = ROLES[mode];
+      const levelText = `уровень ${saved.levelIndex + 1} из ${savedRole.levels.length}`;
+      const title = sameMode ? 'Начать этот путь заново?' : 'Начать новый путь?';
+      const text = sameMode
+        ? `У тебя уже есть сохранённый прогресс: «${savedRole.label}», ${levelText}. Новая игра начнётся с первого уровня, а сохранение заменится.`
+        : `Незаконченный путь за «${savedRole.label}» (${levelText}) ещё сохранён. Если начнёшь за «${nextRole.label}», он заменится новым сохранением.`;
+
+      const dialog = document.createElement('dialog');
+      dialog.className = 'confirm-dialog';
+      dialog.setAttribute('aria-labelledby', 'confirm-title');
+      dialog.setAttribute('aria-describedby', 'confirm-text');
+      dialog.innerHTML = `
+        <h2 id="confirm-title">${title}</h2>
+        <p id="confirm-text">${text}</p>
+        <div class="confirm-actions">
+          <button class="btn btn-primary" data-confirm="keep" type="button">${sameMode ? 'Продолжить путь' : 'Оставить прогресс'}</button>
+          <button class="btn btn-ghost" data-confirm="new" type="button">Начать заново</button>
+        </div>`;
+
+      document.body.appendChild(dialog);
+
+      const close = (value) => {
+        dialog.removeEventListener('cancel', onCancel);
+        if (dialog.open) dialog.close();
+        dialog.remove();
+        resolve(value);
+      };
+      const onCancel = (event) => {
+        event.preventDefault();
+        close(false);
+      };
+
+      dialog.addEventListener('cancel', onCancel);
+      dialog.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-confirm]');
+        if (button) {
+          close(button.dataset.confirm === 'new');
+          return;
+        }
+        if (event.target === dialog) {
+          const rect = dialog.getBoundingClientRect();
+          const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+          if (outside) close(false);
+        }
+      });
+
+      dialog.showModal();
+      const keepButton = dialog.querySelector('[data-confirm="keep"]');
+      if (keepButton) keepButton.focus({ preventScroll: true });
+    });
+  }
+
+  function startGame(mode) {
+    const role = ROLES[mode];
+    if (!role) return;
+    state = {
+      version: 1,
+      mode,
+      levelIndex: 0,
+      stepIndex: 0,
+      stats: {},
+      quality: 0,
+      history: [],
+      pending: null,
+      mini: null,
+      savedAt: Date.now()
+    };
+    role.stats.forEach((stat) => {
+      state.stats[stat.key] = stat.start;
+    });
+    initLevelMini();
+    screen = 'game';
+    persist();
+    sfx('start');
+    render({ scroll: true });
+  }
+
+  function continueGame() {
+    const saved = getSave();
+    if (!saved) return;
+    state = saved;
+    if (!state.stats) {
+      state.stats = {};
+      ROLES[state.mode].stats.forEach((stat) => {
+        state.stats[stat.key] = stat.start;
+      });
+    }
+    if (!Array.isArray(state.history)) state.history = [];
+    if (!state.mini) initLevelMini();
+    screen = 'game';
+    render({ scroll: true });
+  }
+
+  function goHome() {
+    if (screen === 'game' && state) persist();
+    state = null;
+    lastResult = null;
+    screen = 'landing';
+    render({ scroll: true });
+  }
+
+  function finishGame() {
+    if (!state) return;
+    const role = ROLES[state.mode];
+    const score = calculateScore(role, state);
+    const tier = score >= 72 ? 'win' : score >= 47 ? 'mid' : 'lose';
+    const ending = role.endings[tier];
+    const snapshot = {
+      mode: state.mode,
+      score,
+      tier,
+      ending,
+      stats: { ...state.stats },
+      quality: state.quality,
+      history: state.history.slice()
+    };
+
+    const meta = getMeta();
+    const previous = meta[snapshot.mode];
+    const wasBoth = Boolean(meta.seeker && meta.employer);
+    const best = Math.max(previous ? previous.best : 0, score);
+    const bestTier = previous && previous.best > score ? previous.tier : tier;
+
+    meta[snapshot.mode] = {
+      best,
+      tier: bestTier,
+      plays: (previous ? previous.plays : 0) + 1
+    };
+    meta.both = Boolean(meta.seeker && meta.employer);
+    saveMeta(meta);
+
+    snapshot.meta = {
+      both: meta.both,
+      newBoth: meta.both && !wasBoth,
+      best
+    };
+
+    lastResult = snapshot;
+    state = null;
+    clearSave();
+    screen = 'result';
+    render({ scroll: true });
+
+    sfx(tier === 'win' ? 'win' : tier === 'lose' ? 'lose' : 'good');
+    if (tier === 'win') launchConfetti();
+    if (snapshot.meta.newBoth) {
+      window.setTimeout(() => toast('Ачивка: обе стороны одной истории'), 750);
+    }
+  }
+
+  /* ------------------------------------------------------------
+     rendering helpers
+  ------------------------------------------------------------ */
+  function renderEffects(effects) {
+    const entries = Object.entries(effects || {}).filter(([, value]) => value !== 0);
+    if (!entries.length) {
+      return '<div class="effects"><span class="effect-pill neutral">Без изменений</span></div>';
+    }
+    return `<div class="effects">${entries
+      .map(([key, value]) => {
+        const label = EFFECT_LABELS[key] || key;
+        return `<span class="effect-pill ${value > 0 ? 'up' : 'down'}">${value > 0 ? '+' : '−'}${Math.abs(value)} ${label}</span>`;
+      })
+      .join('')}</div>`;
+  }
+
+  function statsHTML(role, stats) {
+    return role.stats
+      .map((stat) => {
+        const value = stats[stat.key] == null ? stat.start : stats[stat.key];
+        return `<div class="stat-row">
+          <div class="stat-top">
+            <span class="stat-name"><i style="background:${stat.color}"></i><span style="color:${stat.color}">${stat.symbol}</span> ${stat.label}</span>
+            <span class="stat-value">${value}</span>
+          </div>
+          <div class="stat-bar"><i class="stat-fill" style="width:${value}%;background:${stat.color}"></i></div>
+        </div>`;
+      })
+      .join('');
+  }
+
+  function networkHTML(role, snapshot) {
+    const nodes = [
+      [47, 38],
+      [130, 26],
+      [232, 48],
+      [60, 112],
+      [188, 100],
+      [130, 158]
+    ];
+    const completed = snapshot.levelIndex + (snapshot.pending && (snapshot.pending.type !== 'choice' || snapshot.pending.isLastStep) ? 1 : 0);
+    const current = snapshot.pending ? -1 : snapshot.levelIndex;
+    const lines = nodes
+      .map(([x, y], index) => `<line class="net-line ${index < completed ? 'lit' : ''}" x1="140" y1="92" x2="${x}" y2="${y}"/>`)
+      .join('');
+    const circles = nodes
+      .map(([x, y], index) => {
+        const classes = ['net-node'];
+        if (index < completed) classes.push('lit');
+        if (index === current) classes.push('current');
+        return `<circle class="${classes.join(' ')}" cx="${x}" cy="${y}" r="11"/>
+          <text class="net-label" x="${x}" y="${y + 3}" style="fill:${index < completed || index === current ? '#0b0b10' : '#8f8ba6'}">${index + 1}</text>`;
+      })
+      .join('');
+    const caption = role.id === 'seeker'
+      ? 'Каждый уровень — новый контакт. Даже отказ — это точка в сети.'
+      : 'Каждый уровень — новый человек в воронке. Даже отказ — это данные.';
+    return `<div class="panel network-panel">
+      <div class="panel-title">Твоя сетка <span>${completed}/${role.levels.length}</span></div>
+      <svg class="network-svg" viewBox="0 0 280 180" role="img" aria-label="Сеть контактов: открыто ${completed} из ${role.levels.length}">
+        <defs>
+          <radialGradient id="coreGrad" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#d7cdff"/>
+            <stop offset="55%" stop-color="#8b7cff"/>
+            <stop offset="100%" stop-color="#4b2fc7"/>
+          </radialGradient>
+        </defs>
+        ${lines}
+        <circle class="net-core" cx="140" cy="92" r="20"/>
+        <text class="net-label" x="140" y="95" style="fill:#fff;font-size:9px">ты</text>
+        ${circles}
+      </svg>
+      <p class="net-caption">${caption}</p>
+    </div>`;
+  }
+
+  function renderLanding() {
+    const meta = getMeta();
+    const saved = getSave();
+    const seekerBest = meta.seeker ? ` · лучший ${meta.seeker.best}/100` : '';
+    const employerBest = meta.employer ? ` · лучший ${meta.employer.best}/100` : '';
+
+    const continueStrip = saved
+      ? `<button class="continue-strip" data-action="continue">
+          <span class="continue-dot"></span>
+          <span class="continue-copy">
+            <b>Продолжить путь</b>
+            <span>${ROLES[saved.mode].label} · уровень ${saved.levelIndex + 1} из ${ROLES[saved.mode].levels.length} · ${timeAgo(saved.savedAt)}</span>
+          </span>
+          <span class="continue-arrow">→</span>
+        </button>`
+      : '';
+
+    const bothBanner = meta.both
+      ? `<div class="both-banner"><i></i><div><b>Обе стороны пройдены.</b> Теперь ты знаешь, как это выглядит изнутри. Можно переиграть и попробовать другой финал.</div></div>`
+      : '';
+
+    app.innerHTML = `<main class="screen landing">
+      <div class="wrap">
+        <section class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="pulse-dot"></span> фан-игра · 5–8 минут · без регистрации</div>
+            <h1>Точка<br><span class="grad">контакта</span></h1>
+            <p class="lead">Игра о поиске работы, в которой отказ — не приговор, а поворот. Выбери сторону и пройди путь до оффера. Или до честного «нет».</p>
+            <div class="hero-meta">
+              <div><b>2</b><span>стороны</span></div>
+              <div><b>6</b><span>уровней</span></div>
+              <div><b>3</b><span>финала</span></div>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="orbit"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+            <svg class="orbit-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <line x1="50" y1="50" x2="14" y2="14"/>
+              <line x1="50" y1="50" x2="86" y2="20"/>
+              <line x1="50" y1="50" x2="14" y2="78"/>
+              <line x1="50" y1="50" x2="82" y2="88"/>
+              <line x1="50" y1="50" x2="50" y2="96"/>
+            </svg>
+            <div class="orbit-core"><b>ты</b><span>в сети</span></div>
+            <span class="orbit-node n1"><i></i>HR</span>
+            <span class="orbit-node n2"><i></i>тимлид</span>
+            <span class="orbit-node n3"><i></i>коллега</span>
+            <span class="orbit-node n4"><i></i>отказ</span>
+            <span class="orbit-node n5"><i></i>оффер</span>
+          </div>
+        </section>
+
+        ${continueStrip}
+
+        <div class="roles-head">
+          <h2>Кем ты будешь?</h2>
+          <span>Выбери сторону — и начнём</span>
+        </div>
+
+        <section class="roles" aria-label="Выбери сторону">
+          <button class="role-card" data-action="start" data-mode="seeker">
+            <span class="role-head">
+              <span class="role-icon">${ICONS.seeker}</span>
+              <span class="role-duration">Режим 01 · ${ROLES.seeker.duration}</span>
+            </span>
+            <span class="role-tag">${ROLES.seeker.tagline}</span>
+            <h2>Соискатель</h2>
+            <p>${ROLES.seeker.description}</p>
+            <span class="role-foot">
+              <span class="role-levels">6 уровней · 3 финала${seekerBest}</span>
+              <span class="role-go">Играть <span>→</span></span>
+            </span>
+          </button>
+
+          <button class="role-card" data-mode="employer" data-action="start">
+            <span class="role-head">
+              <span class="role-icon">${ICONS.employer}</span>
+              <span class="role-duration">Режим 02 · ${ROLES.employer.duration}</span>
+            </span>
+            <span class="role-tag">${ROLES.employer.tagline}</span>
+            <h2>Наниматель</h2>
+            <p>${ROLES.employer.description}</p>
+            <span class="role-foot">
+              <span class="role-levels">6 уровней · 3 финала${employerBest}</span>
+              <span class="role-go">Играть <span>→</span></span>
+            </span>
+          </button>
+        </section>
+
+        ${bothBanner}
+
+        <section class="features" aria-label="Что внутри">
+          <div class="feature">
+            <div class="feature-num">01</div>
+            <h3>Каждое сообщение — ход</h3>
+            <p>Резюме, нетворкинг, собеседование. Решения меняют статистику и финал, а не просто листают историю.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-num">02</div>
+            <h3>Две стороны одной истории</h3>
+            <p>Соискатель и наниматель. Пройди обе стороны — и увидишь, где именно теряется контакт.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-num">03</div>
+            <h3>Финал без правильных ответов</h3>
+            <p>Оффер, компромисс или честное «нет». В любом случае — разбор и ссылка на резюме автора.</p>
+          </div>
+        </section>
+      </div>
+    </main>`;
+  }
+
+  function renderGame() {
+    if (!state) return;
+    const role = ROLES[state.mode];
+    const level = currentLevel();
+    if (!level) {
+      goHome();
+      return;
+    }
+
+    if (level.type === 'resume' && (!state.mini || !Array.isArray(state.mini.selected))) {
+      state.mini = { selected: [] };
+    }
+    if (level.type === 'sort' && (!state.mini || typeof state.mini.index !== 'number')) {
+      state.mini = { index: 0, decisions: [] };
+    }
+
+    const step = currentStep();
+    const dots = role.levels
+      .map((_, index) => `<span class="dot ${index < state.levelIndex ? 'done' : ''} ${index === state.levelIndex ? 'current' : ''}"></span>`)
+      .join('');
+
+    const stepInfo = level.steps ? ` · вопрос ${state.stepIndex + 1}/${level.steps.length}` : '';
+    const intro = Array.isArray(level.intro) ? level.intro : [level.intro];
+    const narrative = intro.filter(Boolean).map((paragraph) => `<p class="narrative">${paragraph}</p>`).join('');
+
+    let body = '';
+    if (state.pending) {
+      body = renderPending(level);
+    } else if (level.type === 'resume') {
+      body = renderResume(level);
+    } else if (level.type === 'sort') {
+      body = renderSort(level);
+    } else {
+      body = renderChoice(step);
+    }
+
+    const quote = role.id === 'seeker'
+      ? '«Люди нанимают людей. Даже когда кажется, что нанимают резюме».'
+      : '«Кандидат — это не резюме. Это человек, который тоже ждёт ответа».';
+
+    app.innerHTML = `<main class="screen game-screen">
+      <div class="wrap">
+        <div class="game-top">
+          <div class="mode-chip"><i></i>${role.label}</div>
+          <div class="progress-mini">
+            <span>Уровень ${state.levelIndex + 1} / ${role.levels.length}</span>
+            <div class="dots" aria-hidden="true">${dots}</div>
+          </div>
+        </div>
+
+        <div class="game-layout">
+          <section class="scene-card" aria-live="polite">
+            <div class="scene-kicker">${level.kicker}${stepInfo}</div>
+            <h1 class="scene-title">${level.title}</h1>
+            ${narrative}
+            ${body}
+          </section>
+
+          <aside class="side-panel" aria-label="Твои показатели">
+            ${networkHTML(role, state)}
+            <div class="panel">
+              <div class="panel-title">Твоё состояние <span>${role.label}</span></div>
+              ${statsHTML(role, state.stats)}
+            </div>
+            <p class="side-quote">${quote}<br><b>— игра</b></p>
+          </aside>
+        </div>
+      </div>
+    </main>`;
+  }
+
+  function renderChoice(step) {
+    const chat = step.speaker
+      ? `<div class="chat">
+          <div class="chat-avatar">${step.avatar || step.speaker.slice(0, 1)}</div>
+          <div class="chat-body">
+            <div class="chat-who">${step.speaker}</div>
+            <div class="chat-text">${step.question}</div>
+          </div>
+        </div>`
+      : '';
+    const prompt = step.prompt || 'Что выберешь?';
+    const options = step.options
+      .map((option, index) => `<button class="choice" data-action="choose" data-option="${option.id}">
+        <span class="choice-key">${'ABCD'[index]}</span>
+        <span class="choice-text">${option.text}</span>
+        <span class="choice-arrow">↗</span>
+      </button>`)
+      .join('');
+    return `${chat}<p class="prompt">${prompt}</p><div class="choices">${options}</div><div class="key-hint"><kbd>1</kbd>–<kbd>4</kbd> можно выбирать с клавиатуры</div>`;
+  }
+
+  function renderResume(level) {
+    const selected = state.mini.selected;
+    const blocks = level.blocks
+      .map((block) => {
+        const isSelected = selected.includes(block.id);
+        return `<button class="block-card ${isSelected ? 'selected' : ''}" data-action="block" data-block="${block.id}" aria-pressed="${isSelected}">
+          <span class="block-icon">${block.icon}</span>
+          <span class="block-copy">
+            <span class="block-title">${block.title}</span>
+            <span class="block-desc">${block.desc}</span>
+          </span>
+          <span class="block-check" aria-hidden="true">✓</span>
+        </button>`;
+      })
+      .join('');
+
+    return `<div class="mini-top">
+        <div class="mini-counter">Выбрано <b>${selected.length}</b> / 4</div>
+        <div class="mini-hint">${selected.length === 4 ? 'Готово. Можно проверять.' : 'Выбери четыре блока, которые продают тебя.'}</div>
+      </div>
+      <div class="blocks-grid">${blocks}</div>
+      <button class="btn btn-primary" data-action="check-resume" ${selected.length === 4 ? '' : 'disabled'}>Проверить резюме <span>→</span></button>`;
+  }
+
+  function renderSort(level) {
+    const candidate = level.candidates[state.mini.index];
+    if (!candidate) return '';
+    const progress = Math.round((state.mini.index / level.candidates.length) * 100);
+    return `<div class="candidate-card">
+        <div class="cand-top">
+          <div class="cand-avatar">${candidate.name.slice(0, 1)}</div>
+          <div>
+            <div class="cand-name">${candidate.name}, ${candidate.age}</div>
+            <div class="cand-role">${candidate.role}</div>
+          </div>
+          <div class="cand-count">Резюме ${state.mini.index + 1} / ${level.candidates.length}</div>
+        </div>
+        <p class="cand-summary">${candidate.summary}</p>
+        <div class="cand-tags">${candidate.tags.map((tag) => `<span class="tag">${tag}</span>`).join('')}</div>
+        <div class="cand-actions">
+          <button class="cand-btn reject" data-action="sort" data-decision="reject">Дальше</button>
+          <button class="cand-btn pick" data-action="sort" data-decision="shortlist">В шортлист</button>
+        </div>
+        <div class="funnel">
+          <span>300 откликов</span>
+          <span class="funnel-bar"><i style="width:${progress}%"></i></span>
+          <span>${level.candidates.length} разговоров</span>
+        </div>
+      </div>`;
+  }
+
+  function renderPending(level) {
+    const pending = state.pending;
+
+    if (pending.type === 'resume') {
+      const badge = resumeBadge(pending.quality);
+      const rows = pending.blocks
+        .map((block) => `<div class="summary-row ${block.quality > 0 ? 'good' : block.quality < 0 ? 'bad' : ''}">
+          <span class="summary-mark">${block.quality > 0 ? '✓' : block.quality < 0 ? '×' : '~'}</span>
+          <div>
+            <div class="summary-name">${block.title}</div>
+            <div class="summary-note">${block.comment}</div>
+          </div>
+        </div>`)
+        .join('');
+      return `<div class="result-panel" data-tone="${badge.tone}" tabindex="-1">
+        <div class="result-head">
+          <span class="result-badge">${badge.label}</span>
+          <span class="result-ctx">${level.title}</span>
+        </div>
+        <p class="result-text">${pending.resultText}</p>
+        <div class="summary-list">${rows}</div>
+        ${renderEffects(pending.effects)}
+        <button class="btn btn-primary" data-action="next">Дальше <span>→</span></button>
+      </div>`;
+    }
+
+    if (pending.type === 'sort') {
+      const badge = sortBadge(pending.correct, pending.total);
+      const rows = pending.decisions
+        .map((decision) => {
+          const correct = decision.shortlist === decision.good;
+          return `<div class="summary-row ${correct ? 'good' : 'bad'}">
+            <span class="summary-mark">${correct ? '✓' : '×'}</span>
+            <div>
+              <div class="summary-name">${decision.name} · ${decision.shortlist ? 'в шортлисте' : 'отказ'} ${correct ? '— верно' : '— мимо'}</div>
+              <div class="summary-note">${decision.note}</div>
+            </div>
+          </div>`;
+        })
+        .join('');
+      return `<div class="result-panel" data-tone="${badge.tone}" tabindex="-1">
+        <div class="result-head">
+          <span class="result-badge">${badge.label}</span>
+          <span class="result-ctx">${pending.correct} из ${pending.total} точных решений</span>
+        </div>
+        <p class="result-text">${pending.resultText}</p>
+        <div class="summary-list">${rows}</div>
+        ${renderEffects(pending.effects)}
+        <button class="btn btn-primary" data-action="next">Дальше <span>→</span></button>
+      </div>`;
+    }
+
+    const badge = decisionBadge(pending.quality);
+    const nextLabel = pending.isLastStep ? 'Дальше' : 'Следующий вопрос';
+    return `<div class="result-panel" data-tone="${badge.tone}" tabindex="-1">
+      <div class="result-head">
+        <span class="result-badge">${badge.label}</span>
+        <span class="result-ctx">${level.title}</span>
+      </div>
+      <p class="result-text">${pending.resultText}</p>
+      ${renderEffects(pending.effects)}
+      <button class="btn btn-primary" data-action="next">${nextLabel} <span>→</span></button>
+    </div>`;
+  }
+
+  function renderResult() {
+    if (!lastResult) return;
+    const role = ROLES[lastResult.mode];
+    const ending = lastResult.ending;
+    const otherRole = ROLES[role.opposite];
+    const dash = ((lastResult.score / 100) * 326.7).toFixed(1);
+    const good = lastResult.history
+      .filter((item) => item.quality > 0)
+      .sort((a, b) => b.quality - a.quality)
+      .slice(0, 3);
+    const bad = lastResult.history
+      .filter((item) => item.quality < 0)
+      .sort((a, b) => a.quality - b.quality)
+      .slice(0, 3);
+
+    const goodItems = good.length
+      ? good.map((item) => `<li class="review-item good"><i>✓</i><div><span class="ri-label">${item.level}</span>${item.short}</div></li>`).join('')
+      : `<li class="review-item good"><i>✓</i><div><span class="ri-label">Путь</span>Ты дошёл до конца и не сдался на середине. Это уже навык.</div></li>`;
+
+    const badItems = bad.length
+      ? bad.map((item) => `<li class="review-item bad"><i>×</i><div><span class="ri-label">${item.level}</span>${item.short}</div></li>`).join('')
+      : `<li class="review-item bad"><i>×</i><div><span class="ri-label">Точка роста</span>Слабых ходов не было. В следующий раз попробуй посмотреть на ситуацию глазами другой стороны.</div></li>`;
+
+    const advice = [ending.next, ...dynamicAdvice(role, lastResult)];
+    const adviceHTML = advice.map((paragraph) => `<p>${paragraph}</p>`).join('');
+
+    const crossNote = role.id === 'seeker'
+      ? 'В режиме «Наниматель» ты встретишь Тимура, Свету и Аню. Одна история — две стороны.'
+      : 'В режиме «Соискатель» ты встретишь Марину — тимлида, которая ищет человека в команду.';
+
+    app.innerHTML = `<main class="screen result-screen">
+      <div class="wrap">
+        <section class="ending-card" data-ending="${lastResult.tier}">
+          <div class="ending-copy">
+            <div class="ending-kicker">Финал · ${role.label} · ${lastResult.score}/100</div>
+            <h1 class="ending-title">${ending.title}</h1>
+            <p class="ending-lead">${ending.lead}</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="ending-badge"><i></i>${ending.badge}</span>
+              ${lastResult.meta && lastResult.meta.both ? `<span class="ending-badge" style="border-color:rgba(139,124,255,.35);background:rgba(124,92,255,.1)"><i style="background:#a78bfa;box-shadow:0 0 12px rgba(167,139,250,.7)"></i>Обе стороны</span>` : ''}
+            </div>
+          </div>
+          <div class="score-box" aria-label="Результат ${lastResult.score} из 100">
+            <svg class="score-svg" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#c8ff6a"/>
+                  <stop offset="55%" stop-color="#8b7cff"/>
+                  <stop offset="100%" stop-color="#ff6fa5"/>
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg" cx="60" cy="60" r="52"/>
+              <circle class="ring-value" cx="60" cy="60" r="52" style="stroke-dasharray:${dash} 326.7"/>
+            </svg>
+            <div class="score-num"><b>${lastResult.score}</b><span>сила пути</span></div>
+          </div>
+        </section>
+
+        <section class="ending-stats" aria-label="Итоговые показатели">
+          ${role.stats
+            .map((stat) => {
+              const value = lastResult.stats[stat.key];
+              return `<div class="ending-stat">
+                <div class="stat-top">
+                  <span class="stat-name"><i style="background:${stat.color}"></i><span style="color:${stat.color}">${stat.symbol}</span> ${stat.label}</span>
+                  <span class="stat-value">${value}</span>
+                </div>
+                <div class="stat-bar"><i class="stat-fill" style="width:${value}%;background:${stat.color}"></i></div>
+              </div>`;
+            })
+            .join('')}
+        </section>
+
+        <section class="review-grid" aria-label="Разбор игры">
+          <div class="review-card">
+            <h2 class="review-title"><i></i>Что сработало</h2>
+            <ul class="review-list">${goodItems}</ul>
+          </div>
+          <div class="review-card bad">
+            <h2 class="review-title"><i></i>Что можно иначе</h2>
+            <ul class="review-list">${badItems}</ul>
+          </div>
+          <div class="review-card advice-card">
+            <h2 class="review-title"><i style="background:#8b7cff"></i>Что дальше</h2>
+            ${adviceHTML}
+          </div>
+        </section>
+
+        <section class="author-card" aria-label="Автор игры">
+          <div class="author-avatar"><span>БХ</span></div>
+          <div class="author-main">
+            <div class="author-kicker">Автор игры · спасибо, что дошёл до конца</div>
+            <h2 class="author-name">Булат Хайрльварин</h2>
+            <p class="author-role">Senior Graphic Designer · 10 лет опыта</p>
+            <p class="author-text">Я сделал эту игру, потому что сам знаю, как это — ждать ответа после собеседования. Дизайн, упаковка и автоматизация рутины — это моя работа. Если тебе близко, загляни в моё портфолио.</p>
+            <div class="author-tags">
+              <span class="author-tag">Брендинг</span>
+              <span class="author-tag">Упаковка</span>
+              <span class="author-tag">Prepress</span>
+              <span class="author-tag">Автоматизация</span>
+            </div>
+          </div>
+          <div class="author-action">
+            <a class="btn btn-lime" href="https://bullez.github.io/designer/" target="_blank" rel="noopener">Смотреть резюме-сайт <span>↗</span></a>
+            <span class="author-url">bullez.github.io/designer</span>
+            <span class="author-note">Откроется в новой вкладке</span>
+          </div>
+        </section>
+
+        <p class="cross-note">${crossNote}</p>
+
+        <div class="result-actions">
+          <button class="btn btn-primary" data-action="share">Поделиться результатом</button>
+          <button class="btn btn-ghost" data-action="other-mode">Сыграть за ${otherRole.label.toLowerCase()}</button>
+          <button class="btn btn-ghost" data-action="replay">Пройти заново</button>
+          <button class="btn btn-ghost" data-action="home">В меню</button>
+        </div>
+      </div>
+    </main>`;
+  }
+
+  function dynamicAdvice(role, result) {
+    const advice = [];
+    const stats = result.stats;
+
+    if (role.id === 'seeker') {
+      if (stats.contacts < 35) {
+        advice.push('Ты почти не выходил к людям. Одно сообщение в Сетке может заменить двадцать откликов. Напиши не «ищу работу», а «помоги разобраться».');
+      } else {
+        advice.push('Ты использовал контакты. Продолжай: люди помнят не резюме, а разговор.');
+      }
+      if (stats.energy < 35) {
+        advice.push('Энергия на нуле. Отдых — не награда за продуктивность, а условие для неё. Начни с одного дня без вакансий.');
+      } else if (stats.fire < 35) {
+        advice.push('Ты сильно себя обесценил. Отказ — это решение одной компании, а не оценка тебя. Верни в резюме три вещи, которые у тебя получились.');
+      } else {
+        advice.push('Ты сохранил контакт с собой. Это редкость на рынке. Не теряй его в первый же месяц на новой работе.');
+      }
+    } else {
+      if (stats.trust < 40) {
+        advice.push('Кандидаты не почувствовали ясности. Доверие теряется на мелочах: не ответить, перенести встречу, забыть про обратную связь.');
+      } else {
+        advice.push('Ты держал контакт с людьми. В найме это важнее скорости.');
+      }
+      if (stats.time < 35) {
+        advice.push('Ты почти не оставил времени на людей. Найм — это не только воронка. Иногда один разговор стоит трёх часов сортировки.');
+      }
+      if (stats.culture < 40) {
+        advice.push('Культура — это то, что ты делаешь, когда никто не смотрит. Кандидаты смотрят.');
+      } else {
+        advice.push('Ты помнил, что за резюме — человек. Это главный навык нанимателя.');
+      }
+    }
+    return advice;
+  }
+
+  function render(opts = {}) {
+    document.body.classList.toggle('is-landing', screen === 'landing');
+    updateSoundButton();
+
+    if (screen === 'landing') {
+      renderLanding();
+      document.title = 'Точка контакта — игра о поиске работы и людях';
+    } else if (screen === 'game') {
+      renderGame();
+      const role = state ? ROLES[state.mode] : null;
+      document.title = role ? `${role.label} · Точка контакта` : 'Точка контакта';
+    } else if (screen === 'result') {
+      renderResult();
+      document.title = lastResult ? `${lastResult.ending.title} · Точка контакта` : 'Точка контакта';
+    }
+
+    if (opts.scroll) {
+      window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+    }
+    if (opts.focus) {
+      const element = $(opts.focus);
+      if (element) element.focus({ preventScroll: true });
+    }
+  }
+
+  /* ------------------------------------------------------------
+     actions
+  ------------------------------------------------------------ */
+  function chooseOption(optionId) {
+    if (!state || state.pending) return;
+    const level = currentLevel();
+    const step = currentStep();
+    if (!level || !step || !step.options) return;
+    const option = step.options.find((item) => item.id === optionId);
+    if (!option) return;
+
+    applyEffects(option.effects);
+    state.quality += option.quality;
+    state.history.push({
+      level: level.title,
+      short: option.short || option.text,
+      quality: option.quality,
+      effects: option.effects || {}
+    });
+
+    state.pending = {
+      type: 'choice',
+      quality: option.quality,
+      effects: option.effects || {},
+      resultText: option.result,
+      isLastStep: !level.steps || state.stepIndex >= level.steps.length - 1
+    };
+
+    persist();
+    sfx(option.quality > 0 ? 'good' : option.quality < 0 ? 'bad' : 'click');
+    render({ focus: '.result-panel' });
+  }
+
+  function nextStep() {
+    if (!state || !state.pending) return;
+    const level = currentLevel();
+    if (!level) return;
+
+    if (state.pending.type === 'choice' && level.steps && state.stepIndex < level.steps.length - 1) {
+      state.stepIndex += 1;
+      state.pending = null;
+    } else {
+      state.levelIndex += 1;
+      state.stepIndex = 0;
+      state.pending = null;
+      state.mini = null;
+      if (state.levelIndex >= ROLES[state.mode].levels.length) {
+        finishGame();
+        return;
+      }
+      initLevelMini();
+    }
+
+    persist();
+    sfx('click');
+    render({ scroll: true });
+  }
+
+  function applyEffects(effects) {
+    if (!effects || !state) return;
+    Object.entries(effects).forEach(([key, value]) => {
+      if (typeof state.stats[key] === 'number') {
+        state.stats[key] = clamp(state.stats[key] + value, 0, 100);
+      }
+    });
+  }
+
+  function toggleBlock(blockId) {
+    if (!state || !state.mini || state.pending) return;
+    const level = currentLevel();
+    if (!level || level.type !== 'resume') return;
+    const block = level.blocks.find((item) => item.id === blockId);
+    if (!block) return;
+    const selected = state.mini.selected;
+    const index = selected.indexOf(blockId);
+    if (index >= 0) {
+      selected.splice(index, 1);
+    } else {
+      if (selected.length >= 4) {
+        toast('В резюме помещается только 4 блока. Сначала убери один.');
+        sfx('bad');
+        return;
+      }
+      selected.push(blockId);
+    }
+    persist();
+    sfx('click');
+    render({ focus: `[data-block="${blockId}"]` });
+  }
+
+  function checkResume() {
+    if (!state || !state.mini || state.pending) return;
+    const level = currentLevel();
+    if (!level || level.type !== 'resume') return;
+    if (state.mini.selected.length !== 4) {
+      toast('Выбери ровно 4 блока');
+      return;
+    }
+
+    const blocks = state.mini.selected
+      .map((id) => level.blocks.find((block) => block.id === id))
+      .filter(Boolean);
+    const effects = {};
+    let quality = 0;
+    blocks.forEach((block) => {
+      quality += block.quality;
+      Object.entries(block.effects || {}).forEach(([key, value]) => {
+        effects[key] = (effects[key] || 0) + value;
+      });
+    });
+
+    applyEffects(effects);
+    state.quality += quality;
+    state.history.push({
+      level: level.title,
+      short: quality >= 4 ? 'Сильное резюме' : quality >= 2 ? 'Рабочее резюме' : 'Резюме не сработало',
+      quality,
+      effects
+    });
+    state.pending = {
+      type: 'resume',
+      blocks,
+      quality,
+      effects,
+      resultText: resumeOutcome(quality)
+    };
+    persist();
+    sfx(quality >= 4 ? 'good' : quality >= 2 ? 'click' : 'bad');
+    render({ focus: '.result-panel' });
+  }
+
+  function sortCandidate(decision) {
+    if (!state || !state.mini || state.pending || busy) return;
+    const level = currentLevel();
+    if (!level || level.type !== 'sort') return;
+    const candidate = level.candidates[state.mini.index];
+    if (!candidate) return;
+
+    busy = true;
+    const card = $('.candidate-card');
+    if (card) card.classList.add('leaving');
+    const shortlist = decision === 'shortlist';
+
+    window.setTimeout(() => {
+      if (!state) {
+        busy = false;
+        return;
+      }
+      state.mini.decisions.push({
+        name: candidate.name,
+        shortlist,
+        good: candidate.good,
+        note: candidate.note
+      });
+      state.mini.index += 1;
+
+      if (state.mini.index >= level.candidates.length) {
+        finishSort(level);
+      } else {
+        persist();
+        sfx('click');
+        render();
+      }
+      busy = false;
+    }, reduceMotion() ? 0 : 190);
+  }
+
+  function finishSort(level) {
+    const decisions = state.mini.decisions;
+    const total = level.candidates.length;
+    const correct = decisions.filter((decision) => decision.shortlist === decision.good).length;
+    const quality = correct * 2 - total;
+    const effects = {
+      time: -6,
+      trust: Math.round((correct - total / 2) * 3),
+      culture: Math.round((correct - total / 2) * 4)
+    };
+
+    applyEffects(effects);
+    state.quality += quality;
+    state.history.push({
+      level: level.title,
+      short: `Шортлист: ${correct} из ${total}`,
+      quality,
+      effects
+    });
+    state.pending = {
+      type: 'sort',
+      decisions: decisions.slice(),
+      correct,
+      total,
+      quality,
+      effects,
+      resultText: sortOutcome(correct, total, decisions)
+    };
+    persist();
+    sfx(correct >= total - 1 ? 'good' : correct >= total / 2 ? 'click' : 'bad');
+    render({ focus: '.result-panel' });
+  }
+
+  function replay() {
+    if (!lastResult) return;
+    const mode = lastResult.mode;
+    lastResult = null;
+    startGame(mode);
+  }
+
+  function playOtherMode() {
+    if (!lastResult) return;
+    const mode = ROLES[lastResult.mode].opposite;
+    lastResult = null;
+    startGame(mode);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok = document.execCommand('copy');
+        textarea.remove();
+        return ok;
+      } catch (fallbackError) {
+        return false;
+      }
+    }
+  }
+
+  async function shareResult() {
+    if (!lastResult) return;
+    const role = ROLES[lastResult.mode];
+    const url = window.location.href.split('#')[0];
+    const text = `Я прошёл игру «Точка контакта» за ${role.label.toLowerCase()}: ${lastResult.score}/100 — «${lastResult.ending.badge}». Попробуй и ты:`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Точка контакта', text, url });
+        return;
+      } catch (error) {
+        /* user cancelled — fall back to copy */
+      }
+    }
+    const copied = await copyText(`${text} ${url}`);
+    toast(copied ? 'Результат скопирован' : 'Не получилось скопировать — ссылка в адресной строке');
+  }
+
+  /* ------------------------------------------------------------
+     sound
+  ------------------------------------------------------------ */
+  let audioCtx = null;
+
+  function ensureAudio() {
+    if (audioCtx === false) return;
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) {
+        audioCtx = false;
+        return;
+      }
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  }
+
+  function tone(freq, duration = 0.08, type = 'sine', volume = 0.035, delay = 0) {
+    if (!soundOn) return;
+    ensureAudio();
+    if (!audioCtx || audioCtx === false) return;
+    try {
+      const start = audioCtx.currentTime + delay;
+      const oscillator = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(volume, start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      oscillator.connect(gain);
+      gain.connect(audioCtx.destination);
+      oscillator.start(start);
+      oscillator.stop(start + duration + 0.02);
+    } catch (error) {
+      /* ignore */
+    }
+  }
+
+  function sfx(name) {
+    if (!soundOn) return;
+    if (name === 'click') {
+      tone(420, 0.055, 'sine', 0.03);
+    } else if (name === 'start') {
+      tone(330, 0.09, 'sine', 0.035);
+      tone(440, 0.1, 'sine', 0.03, 0.07);
+    } else if (name === 'good') {
+      tone(523, 0.08, 'sine', 0.035);
+      tone(659, 0.09, 'sine', 0.033, 0.06);
+      tone(784, 0.1, 'sine', 0.03, 0.12);
+    } else if (name === 'bad') {
+      tone(196, 0.12, 'sawtooth', 0.025);
+      tone(147, 0.14, 'sawtooth', 0.02, 0.08);
+    } else if (name === 'win') {
+      [523, 659, 784, 1047].forEach((freq, index) => tone(freq, 0.16, 'sine', 0.033, index * 0.1));
+    } else if (name === 'lose') {
+      [392, 330, 262].forEach((freq, index) => tone(freq, 0.2, 'sine', 0.028, index * 0.12));
+    }
+  }
+
+  function updateSoundButton() {
+    const button = $('#sound-toggle');
+    if (!button) return;
+    button.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    button.setAttribute('aria-label', soundOn ? 'Выключить звук' : 'Включить звук');
+    button.title = soundOn ? 'Выключить звук' : 'Включить звук';
+  }
+
+  function toggleSound() {
+    soundOn = !soundOn;
+    try {
+      localStorage.setItem(STORAGE.sound, soundOn ? 'on' : 'off');
+    } catch (error) {
+      /* ignore */
+    }
+    updateSoundButton();
+    if (soundOn) {
+      ensureAudio();
+      sfx('click');
+    }
+    toast(soundOn ? 'Звук включён' : 'Звук выключен');
+  }
+
+  /* ------------------------------------------------------------
+     toast + confetti
+  ------------------------------------------------------------ */
+  let toastTimer = null;
+
+  function toast(message) {
+    const element = $('#toast');
+    if (!element) return;
+    element.textContent = message;
+    element.classList.add('show');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => element.classList.remove('show'), 2400);
+  }
+
+  function launchConfetti() {
+    if (reduceMotion()) return;
+    const root = $('#confetti');
+    if (!root) return;
+    root.innerHTML = '';
+    const colors = ['#8b7cff', '#c8ff6a', '#ff6fa5', '#ffb86b', '#ffffff'];
+    for (let index = 0; index < 64; index += 1) {
+      const piece = document.createElement('i');
+      piece.style.left = `${Math.random() * 100}%`;
+      piece.style.background = colors[index % colors.length];
+      piece.style.animationDelay = `${Math.random() * 0.6}s`;
+      piece.style.animationDuration = `${2.4 + Math.random() * 1.8}s`;
+      piece.style.setProperty('--dx', `${(Math.random() * 2 - 1) * 30}vw`);
+      piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+      if (index % 3 === 0) piece.style.borderRadius = '50%';
+      root.appendChild(piece);
+    }
+    window.setTimeout(() => {
+      root.innerHTML = '';
+    }, 5200);
+  }
+
+  /* ------------------------------------------------------------
+     background network canvas
+  ------------------------------------------------------------ */
+  function initCanvas() {
+    const canvas = $('#net-canvas');
+    if (!canvas) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let nodes = [];
+    let frame = null;
+    const still = reduceMotion();
+
+    function makeNodes() {
+      const count = Math.min(46, Math.max(18, Math.floor((width * height) / 32000)));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: Math.random() * 1.5 + 0.6
+      }));
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      makeNodes();
+      if (still) draw();
+    }
+
+    function draw() {
+      context.clearRect(0, 0, width, height);
+      for (let i = 0; i < nodes.length; i += 1) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j += 1) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const distanceSquared = dx * dx + dy * dy;
+          if (distanceSquared < 130 * 130) {
+            const alpha = (1 - Math.sqrt(distanceSquared) / 130) * 0.17;
+            context.strokeStyle = `rgba(139,124,255,${alpha})`;
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(a.x, a.y);
+            context.lineTo(b.x, b.y);
+            context.stroke();
+          }
+        }
+      }
+      nodes.forEach((node) => {
+        context.beginPath();
+        context.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+        context.fillStyle = 'rgba(180,170,255,.45)';
+        context.fill();
+      });
+      if (!still) {
+        nodes.forEach((node) => {
+          node.x += node.vx;
+          node.y += node.vy;
+          if (node.x < 0 || node.x > width) node.vx *= -1;
+          if (node.y < 0 || node.y > height) node.vy *= -1;
+        });
+        frame = window.requestAnimationFrame(draw);
+      }
+    }
+
+    resize();
+    if (!still) draw();
+    window.addEventListener('resize', () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      resize();
+    });
+  }
+
+  /* ------------------------------------------------------------
+     events
+  ------------------------------------------------------------ */
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest('[data-action]');
+    if (!target) return;
+    const action = target.dataset.action;
+
+    if (action === 'home') {
+      event.preventDefault();
+      goHome();
+    } else if (action === 'start') {
+      requestStart(target.dataset.mode);
+    } else if (action === 'continue') {
+      continueGame();
+    } else if (action === 'choose') {
+      chooseOption(target.dataset.option);
+    } else if (action === 'next') {
+      nextStep();
+    } else if (action === 'block') {
+      toggleBlock(target.dataset.block);
+    } else if (action === 'check-resume') {
+      checkResume();
+    } else if (action === 'sort') {
+      sortCandidate(target.dataset.decision);
+    } else if (action === 'share') {
+      shareResult();
+    } else if (action === 'replay') {
+      replay();
+    } else if (action === 'other-mode') {
+      playOtherMode();
+    } else if (action === 'toggle-sound') {
+      toggleSound();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (screen !== 'game' || !state || state.pending) return;
+    if (event.key < '1' || event.key > '4') return;
+    const level = currentLevel();
+    if (!level || level.type === 'resume' || level.type === 'sort') return;
+    const step = currentStep();
+    if (!step || !step.options) return;
+    const option = step.options[Number(event.key) - 1];
+    if (option) {
+      event.preventDefault();
+      chooseOption(option.id);
+    }
+  });
+
+  document.addEventListener('pointerdown', () => {
+    if (soundOn) ensureAudio();
+  }, { once: true });
+
+  /* ------------------------------------------------------------
+     boot
+  ------------------------------------------------------------ */
+  initCanvas();
+  render();
+})();
+
+</script>
+</body>
+</html>
