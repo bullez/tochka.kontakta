@@ -383,12 +383,95 @@ body.is-landing .header-menu{display:none}
 .cross-note{font-size:12px;color:#a8a299;margin:18px 0 0;line-height:1.6;max-width:72ch}
 .cross-note b{color:#d3ccc1}
 
+/* ---------- stats ---------- */
+.stats-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:22px;padding:clamp(22px,3.4vw,30px);border-radius:24px;border:1px solid rgba(95,214,192,.24);background:linear-gradient(120deg,rgba(95,214,192,.11),rgba(242,166,90,.07) 58%,rgba(255,255,255,.02));flex-wrap:wrap}
+.stats-cta h2{font-family:var(--font-display);font-size:clamp(22px,2.8vw,30px);letter-spacing:-.035em;line-height:1.1;margin:0 0 7px}
+.stats-cta p{font-size:13px;line-height:1.6;color:#c4bdb2;margin:0;max-width:60ch}
+.stats-screen{padding-top:34px}
+.stats-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+.stats-head>div:first-child{min-width:0;flex:1 1 280px}
+.stats-head h1{font-family:var(--font-display);font-size:clamp(36px,5.6vw,64px);line-height:.98;letter-spacing:-.05em;margin:10px 0 10px}
+.stats-head p{font-size:14px;line-height:1.65;color:#c4bdb2;margin:0;max-width:70ch}
+.stats-head-actions{display:flex;gap:8px;flex-wrap:wrap}
+.stats-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d3ccc1}
+.stats-badge i{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px rgba(168,230,176,.7);flex:none}
+.stats-badge.local i{background:var(--accent);box-shadow:0 0 12px rgba(242,166,90,.6)}
+.stats-badge.error i{background:var(--red);box-shadow:0 0 12px rgba(255,122,107,.6)}
+.stats-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stats-kpi{padding:20px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.015));min-width:0}
+.stats-kpi span,.stats-kpi small{overflow-wrap:anywhere}
+.stats-kpi b{display:block;font-family:var(--font-display);font-size:clamp(28px,3.8vw,42px);line-height:1;letter-spacing:-.045em;margin-bottom:8px}
+.stats-kpi span{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#a8a299}
+.stats-kpi small{display:block;font-size:11px;color:#8f897f;margin-top:6px;line-height:1.45}
+.stats-panels{display:grid;grid-template-columns:1.25fr .85fr;gap:16px;margin-top:16px}
+.stats-panel{padding:22px;border-radius:24px;border:1px solid var(--line);background:rgba(21,26,30,.78);min-width:0}
+.stats-panel h2{font-family:var(--font-display);font-size:20px;letter-spacing:-.03em;margin:0 0 4px;line-height:1.2}
+.stats-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+.stats-panel-head p{font-size:11px;color:#9f998f;margin:0;line-height:1.5;max-width:44ch}
+.stats-panel-head span{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8f897f;white-space:nowrap}
+.lb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.lb-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 11px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid transparent}
+.lb-row.you{border-color:rgba(168,230,176,.28);background:rgba(168,230,176,.07)}
+.lb-rank{font-family:var(--font-display);font-size:12px;color:#8f897f;text-align:center}
+.lb-row:nth-child(1) .lb-rank{color:#ffd2a1}
+.lb-row:nth-child(2) .lb-rank{color:#d8d2c8}
+.lb-row:nth-child(3) .lb-rank{color:#d9a06d}
+.lb-main{min-width:0}
+.lb-name{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-flag{font-size:14px;line-height:1}
+.lb-meta{font-size:10px;color:#9f998f;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-score{text-align:right}
+.lb-score b{display:block;font-family:var(--font-display);font-size:18px;line-height:1;letter-spacing:-.03em}
+.lb-score span{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#8f897f}
+.lb-you{font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-left:3px}
+.stats-empty{padding:22px 16px;border-radius:14px;border:1px dashed rgba(255,255,255,.12);text-align:center;color:#9f998f;font-size:12px;line-height:1.6}
+.stats-mode{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.stats-mode-row{display:grid;grid-template-columns:96px minmax(0,1fr) 38px;gap:9px;align-items:center;font-size:11px}
+.stats-mode-row span:first-child{color:#c4bdb2}
+.stats-mode-row span:first-child small{display:block;font-size:9px;font-weight:400;color:#8f897f;margin-top:2px;letter-spacing:0}
+.stats-mode-bar{height:7px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.stats-mode-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--teal))}
+.stats-mode-row b{text-align:right;font-size:11px;color:#d3ccc1}
+.stats-mode-note{font-size:10px;color:#8f897f;line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.stats-tiers{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.stats-tier-row{display:grid;grid-template-columns:88px minmax(0,1fr) 26px;gap:8px;align-items:center;font-size:10px;color:#c4bdb2}
+.stats-tier-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.stats-tier-bar i{display:block;height:100%;border-radius:99px;background:var(--mint)}
+.stats-tier-row.mid .stats-tier-bar i{background:var(--accent)}
+.stats-tier-row.lose .stats-tier-bar i{background:var(--teal)}
+.stats-tier-row b{text-align:right;font-size:10px;color:#d3ccc1}
+.stats-recent{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.stats-recent-title{font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#8f897f;margin-bottom:8px}
+.recent-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:#c4bdb2;padding:5px 0}
+.recent-row span:first-child{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-row b{color:#f0ece3;font-size:11px;white-space:nowrap}
+.geo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.geo-list{display:flex;flex-direction:column;gap:9px}
+.geo-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:11px}
+.geo-row-head{display:flex;align-items:center;gap:7px;min-width:0}
+.geo-row-head span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#d3ccc1}
+.geo-row-head b{font-size:10px;color:#8f897f;font-weight:700}
+.geo-bar{grid-column:1/-1;height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:-3px}
+.geo-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--mint))}
+.geo-count{font-size:10px;color:#8f897f}
+.stats-ach-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ach-card{padding:13px;border-radius:14px;border:1px solid rgba(168,230,176,.2);background:rgba(168,230,176,.06);min-width:0}
+.ach-card.locked{opacity:.46;border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.02)}
+.ach-card b{display:block;font-size:11px;line-height:1.3;margin-bottom:3px}
+.ach-card span{display:block;font-size:9px;line-height:1.45;color:#a8a299}
+.stats-note{font-size:11px;line-height:1.65;color:#8f897f;margin:16px 0 0;max-width:80ch}
+.stats-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.stats-skeleton{height:12px;border-radius:99px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200% 100%;animation:skeleton 1.4s linear infinite;margin:10px 0}
+@keyframes skeleton{to{background-position:-200% 0}}
+
 /* ---------- footer / toast / confetti ---------- */
 .site-footer{border-top:1px solid rgba(255,255,255,.05);padding:24px 0 34px;color:#a8a299;font-size:11px}
 .footer-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .footer-inner p{margin:0}
 .footer-inner a{color:#b5afa5;text-decoration:none}
 .footer-inner a:hover{color:#fff}
+.footer-joke{border:0;background:none;padding:0;color:var(--mint);font-size:11px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.footer-joke:hover{color:#fff}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:300;padding:12px 18px;border-radius:999px;background:#1d2429;border:1px solid rgba(255,255,255,.12);color:#f7f2e8;font-size:13px;font-weight:700;box-shadow:0 20px 50px -20px #000;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;max-width:calc(100vw - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .confirm-dialog{width:min(440px,calc(100vw - 32px));border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px;background:#151a1e;color:var(--text);box-shadow:0 40px 100px -30px #000}
@@ -426,6 +509,8 @@ body.is-landing .header-menu{display:none}
   .game-layout{grid-template-columns:1fr}
   .side-panel{position:static;display:grid;grid-template-columns:1fr 1fr;order:2}
   .scene-card{min-height:0}
+  .stats-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats-panels{grid-template-columns:1fr}
 }
 @media (max-width:700px){
   .features{grid-template-columns:1fr}
@@ -444,7 +529,17 @@ body.is-landing .header-menu{display:none}
   .author-avatar .author-initials{font-size:22px}
   .author-photo{border-radius:19px}
   .footer-inner{flex-direction:column}
+  .geo-grid{grid-template-columns:1fr}
+  .stats-ach-grid{grid-template-columns:1fr 1fr}
+  .stats-head-actions{width:100%;display:flex;flex-wrap:wrap}
+  .stats-head-actions .btn{flex:1 1 140px;min-width:0}
 }
+@media (max-width:360px){
+  .header-actions{gap:6px}
+  .header-menu{width:38px;height:38px;padding:0;font-size:0;display:grid;place-items:center;border-radius:999px}
+  .header-menu::after{content:'←';font-size:17px;font-weight:800;line-height:1}
+}
+
 @media (max-width:520px){
   .wrap{width:calc(100% - 28px)}
   .site-header{padding:12px 14px}
@@ -462,6 +557,18 @@ body.is-landing .header-menu{display:none}
   .ending-card{border-radius:24px}
   .author-card{border-radius:24px}
   .key-hint{display:none}
+  .stats-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats-kpi{padding:16px}
+  .stats-head-actions{flex-direction:column}
+  .stats-head-actions .btn{flex:none;width:100%;white-space:normal}
+  .stats-panel{padding:18px}
+  .stats-ach-grid{grid-template-columns:1fr}
+  .stats-actions .btn{width:100%}
+  .stats-cta{padding:20px}
+  .stats-cta .btn{width:100%}
+}
+@media (max-width:360px){
+  .hero h1{font-size:clamp(36px,11.4vw,44px)}
 }
 @media (hover:none){
   .choice:hover{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.08);transform:none;box-shadow:none}
@@ -500,6 +607,11 @@ body.is-landing .header-menu{display:none}
     <span class="brand-word">точка<i>.</i></span>
   </a>
   <div class="header-actions">
+    <button class="icon-btn" data-action="stats" aria-label="Статистика игроков" title="Статистика">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>
+      </svg>
+    </button>
     <button class="icon-btn" id="sound-toggle" data-action="toggle-sound" aria-label="Выключить звук" aria-pressed="true" title="Звук">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4 9v6h4l5 4V5L8 9H4z"/>
@@ -516,7 +628,7 @@ body.is-landing .header-menu{display:none}
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <p>Вымышленная история о поиске работы. Совпадения случайны.</p>
+    <p>Вымышленная история о поиске работы. Совпадения случайны. <button class="footer-joke" type="button" data-action="joke">Ещё шутка</button></p>
     <p>Сделал <a href="https://bullez.github.io/designer/" target="_blank" rel="noopener">Булат Хайрльварин</a> · 2026</p>
   </div>
 </footer>
@@ -541,7 +653,38 @@ body.is-landing .header-menu{display:none}
   const STORAGE = {
     save: 'tochka.contact.save.v1',
     meta: 'tochka.contact.meta.v1',
-    sound: 'tochka.contact.sound'
+    sound: 'tochka.contact.sound',
+    runs: 'tochka.contact.runs.v1',
+    player: 'tochka.contact.player.v1',
+    geo: 'tochka.contact.geo.v1',
+    geoBackoff: 'tochka.contact.geoBackoff.v1',
+    achievements: 'tochka.contact.achievements.v1',
+    poke: 'tochka.contact.poke.v1',
+    logo: 'tochka.contact.logo.v1'
+  };
+
+  /* Общий рейтинг работает через Supabase. Вставь URL проекта и публичный
+     publishable key (sb_publishable_...) или legacy anon key, выполни SQL
+     из README — и статистика станет общей. Без этих строк всё локально. */
+  const ANALYTICS = Object.assign({
+    supabaseUrl: 'https://eqmzfnwfjwytlxgydloi.supabase.co',
+    anonKey: 'sb_publishable_OGfQxIA-IUTBiDi7QJRspA_eXL_pI0E',
+    table: 'tochka_runs',
+    limit: 1000
+  }, window.TOCHKA_STATS || {});
+
+  const analyticsReady = Boolean(
+    ANALYTICS.supabaseUrl && ANALYTICS.anonKey && ANALYTICS.table
+  );
+  const analyticsEndpoint = analyticsReady
+    ? `${String(ANALYTICS.supabaseUrl).replace(/\/+$/, '')}/rest/v1/${ANALYTICS.table}`
+    : '';
+  const analyticsHeaders = (extra = {}) => {
+    const key = String(ANALYTICS.anonKey);
+    const headers = { apikey: key, ...extra };
+    // Новые publishable-ключи не являются JWT и передаются только в apikey.
+    if (key.startsWith('eyJ')) headers.Authorization = `Bearer ${key}`;
+    return headers;
   };
 
   const EFFECT_LABELS = {
@@ -566,6 +709,200 @@ body.is-landing .header-menu{display:none}
     return many;
   };
 
+  const escapeHTML = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+
+  const cleanText = (value, max = 80) => String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max);
+
+  const formatNumber = (value) => {
+    const number = Number(value) || 0;
+    try {
+      return new Intl.NumberFormat('ru-RU').format(number);
+    } catch (error) {
+      return String(number);
+    }
+  };
+
+  const randomSeed = () => {
+    try {
+      if (window.crypto && window.crypto.getRandomValues) {
+        const values = new Uint32Array(1);
+        window.crypto.getRandomValues(values);
+        return values[0];
+      }
+    } catch (error) {
+      /* fall through */
+    }
+    return Math.floor(Math.random() * 4294967296);
+  };
+
+  const hashString = (text) => {
+    let hash = 2166136261;
+    const source = String(text);
+    for (let index = 0; index < source.length; index += 1) {
+      hash ^= source.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  };
+
+  const mulberry32 = (seed) => {
+    let value = seed >>> 0;
+    return () => {
+      value += 0x6D2B79F5;
+      let result = value;
+      result = Math.imul(result ^ (result >>> 15), result | 1);
+      result ^= result + Math.imul(result ^ (result >>> 7), result | 61);
+      return ((result ^ (result >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+
+  const seededShuffle = (items, seedText) => {
+    const list = Array.isArray(items) ? items.slice() : [];
+    const random = mulberry32(hashString(seedText));
+    for (let index = list.length - 1; index > 0; index -= 1) {
+      const swap = Math.floor(random() * (index + 1));
+      [list[index], list[swap]] = [list[swap], list[index]];
+    }
+    return list;
+  };
+
+  const makeId = () => {
+    try {
+      if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        return window.crypto.randomUUID();
+      }
+    } catch (error) {
+      /* fall through */
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+      const random = Math.floor(Math.random() * 16);
+      const value = char === 'x' ? random : (random & 0x3) | 0x8;
+      return value.toString(16);
+    });
+  };
+
+  const MEME_LINES = [
+    'Работа не волк. Волк — это дедлайн.',
+    'Всё идёт по плану. План был другой.',
+    'Это не баг, а фича. В резюме — «гибкость».',
+    'Ну это другое.',
+    'Сорок семь отказов — это не карма, это выборка.',
+    'HR читает резюме семь секунд. Пять из них — ищет ссылку.',
+    'Опыт — это то, что осталось после выгорания.',
+    'Собеседование — это разговор двух людей, которые оба устали.',
+    'Идеального кандидата не бывает. Бывает подходящий момент.',
+    'В резюме не пишут «умею гуглить». А зря.',
+    'Работа мечты начинается с ответа на письмо.',
+    'Кот-аналитик говорит: корреляция — не причинность.'
+  ];
+
+  const CITY_NAMES_RU = {
+    'Moscow': 'Москва',
+    'Saint Petersburg': 'Санкт-Петербург',
+    'Novosibirsk': 'Новосибирск',
+    'Yekaterinburg': 'Екатеринбург',
+    'Kazan': 'Казань',
+    'Nizhny Novgorod': 'Нижний Новгород',
+    'Chelyabinsk': 'Челябинск',
+    'Samara': 'Самара',
+    'Omsk': 'Омск',
+    'Rostov-on-Don': 'Ростов-на-Дону',
+    'Ufa': 'Уфа',
+    'Krasnoyarsk': 'Красноярск',
+    'Voronezh': 'Воронеж',
+    'Perm': 'Пермь',
+    'Volgograd': 'Волгоград',
+    'Krasnodar': 'Краснодар',
+    'Saratov': 'Саратов',
+    'Tyumen': 'Тюмень',
+    'Tolyatti': 'Тольятти',
+    'Izhevsk': 'Ижевск',
+    'Barnaul': 'Барнаул',
+    'Ulyanovsk': 'Ульяновск',
+    'Irkutsk': 'Иркутск',
+    'Khabarovsk': 'Хабаровск',
+    'Yaroslavl': 'Ярославль',
+    'Vladivostok': 'Владивосток',
+    'Makhachkala': 'Махачкала',
+    'Tomsk': 'Томск',
+    'Orenburg': 'Оренбург',
+    'Kemerovo': 'Кемерово',
+    'Novokuznetsk': 'Новокузнецк',
+    'Ryazan': 'Рязань',
+    'Astrakhan': 'Астрахань',
+    'Naberezhnye Chelny': 'Набережные Челны',
+    'Penza': 'Пенза',
+    'Lipetsk': 'Липецк',
+    'Kirov': 'Киров',
+    'Cheboksary': 'Чебоксары',
+    'Tula': 'Тула',
+    'Kaliningrad': 'Калининград',
+    'Kursk': 'Курск',
+    'Sochi': 'Сочи',
+    'Stavropol': 'Ставрополь',
+    'Ulan-Ude': 'Улан-Удэ',
+    'Tver': 'Тверь',
+    'Magnitogorsk': 'Магнитогорск',
+    'Ivanovo': 'Иваново',
+    'Bryansk': 'Брянск',
+    'Belgorod': 'Белгород',
+    'Surgut': 'Сургут',
+    'Vladimir': 'Владимир',
+    'Chita': 'Чита',
+    'Arkhangelsk': 'Архангельск',
+    'Smolensk': 'Смоленск',
+    'Kaluga': 'Калуга',
+    'Cherepovets': 'Череповец',
+    'Vologda': 'Вологда',
+    'Saransk': 'Саранск',
+    'Kurgan': 'Курган',
+    'Orel': 'Орёл',
+    'Yakutsk': 'Якутск',
+    'Murmansk': 'Мурманск',
+    'Tambov': 'Тамбов',
+    'Grozny': 'Грозный',
+    'Petrozavodsk': 'Петрозаводск',
+    'Kostroma': 'Кострома',
+    'Novorossiysk': 'Новороссийск',
+    'Syktyvkar': 'Сыктывкар',
+    'Nalchik': 'Нальчик',
+    'Pskov': 'Псков',
+    'Yuzhno-Sakhalinsk': 'Южно-Сахалинск',
+    'Petropavlovsk-Kamchatsky': 'Петропавловск-Камчатский',
+    'Abakan': 'Абакан',
+    'Norilsk': 'Норильск',
+    'Krasnogorsk': 'Красногорск',
+    'Nakhodka': 'Находка',
+    'Pyatigorsk': 'Пятигорск',
+    'Kislovodsk': 'Кисловодск',
+    'Maykop': 'Майкоп',
+    'Anapa': 'Анапа',
+    'Gelendzhik': 'Геленджик'
+  };
+
+  const ACHIEVEMENTS = {
+    first: { title: 'Первый шаг', text: 'Дойти до финала игры.' },
+    both: { title: 'Обе стороны', text: 'Пройти путь и за соискателя, и за нанимателя.' },
+    perfect: { title: '80+', text: 'Набрать 80 баллов из 100.' },
+    clean: { title: 'Без слабых ходов', text: 'Пройти игру без единого отрицательного решения.' },
+    poke: { title: 'Погладить точку', text: 'Нажать на точку на главной.' },
+    poked10: { title: 'Точка-друг', text: 'Погладить точку десять раз.' },
+    konami: { title: '↑↑↓↓←→←→BA', text: 'Найти секретный код.' },
+    logo: { title: 'Семь раз отмерь', text: 'Нажать на логотип семь раз.' },
+    joke: { title: 'Мем-хранитель', text: 'Попросить у игры шутку.' },
+    stats: { title: 'Аналитик', text: 'Заглянуть в статистику игроков.' }
+  };
+
   /* ------------------------------------------------------------
      game content
   ------------------------------------------------------------ */
@@ -576,7 +913,7 @@ body.is-landing .header-menu{display:none}
       opposite: 'employer',
       tagline: '47 отказов. Один шанс.',
       description: 'Ты ищешь работу дольше, чем планировал. Пройди путь от очередного отказа до разговора, в котором тебя слышат.',
-      duration: '5–8 минут',
+      duration: '6–9 минут',
       stats: [
         { key: 'energy', label: 'Энергия', symbol: '⚡', color: '#ffb07a', start: 55 },
         { key: 'fire', label: 'Огонь', symbol: '✦', color: '#f2a65a', start: 40 },
@@ -899,6 +1236,47 @@ body.is-landing .header-menu{display:none}
                   result: 'Человек без камеры: «То есть ответа нет». Марина делает пометку.'
                 }
               ]
+            },
+            {
+              stepTitle: 'Пробел в опыте',
+              speaker: 'Человек без камеры',
+              avatar: '?',
+              question: '— У вас в резюме пробел в восемь месяцев. Что это было?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Это личное»',
+                  text: '«Это личное. На работу не влияет».',
+                  quality: -1,
+                  effects: { fire: -3, contacts: -2 },
+                  result: 'Человек без камеры: «Понятно». Марина записывает. Пауза в резюме — не приговор, но отказ обсуждать её превращает паузу в тень.'
+                },
+                {
+                  id: 'b',
+                  short: 'Назвать причину и что делал',
+                  text: '«Ухаживал за родителем. Параллельно закончил два курса и сделал один фриланс-проект — могу показать».',
+                  quality: 2,
+                  effects: { fire: 6, energy: -2 },
+                  result: 'Ты говоришь коротко и по делу. Марина: «Спасибо, что объяснили». Человек без камеры перестаёт рисовать. Пауза остаётся паузой, а не дырой в биографии.'
+                },
+                {
+                  id: 'c',
+                  short: '«Работал неофициально»',
+                  text: '«Были проекты, но без официального оформления».',
+                  quality: 0,
+                  effects: { contacts: -1 },
+                  result: 'Звучит честно, но без деталей — как «что-то делал». Марина просит пример. Ты его не подготовил.'
+                },
+                {
+                  id: 'd',
+                  short: 'Спросить, важно ли это',
+                  text: '«Могу рассказать. Но сначала уточню: для этой роли важен непрерывный стаж или результат?»',
+                  quality: 1,
+                  effects: { contacts: 2, fire: 2 },
+                  result: 'Марина: «Результат важнее». Ты выигрываешь паузу и переводишь разговор в свою пользу. Но вопрос о пробеле остаётся без ответа.'
+                }
+              ]
             }
           ]
         },
@@ -983,6 +1361,47 @@ body.is-landing .header-menu{display:none}
                   result: 'Марина: «Портфолио — хорошо, но нам важно увидеть ход мыслей». Компромисс не сработал, но разговор остался живым.'
                 }
               ]
+            },
+            {
+              stepTitle: 'Контроффер',
+              speaker: 'Марина',
+              avatar: 'М',
+              question: '— У нас есть второй кандидат. Если согласитесь сегодня, добавим 5%, но тестовое всё равно до воскресенья. Что скажете?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: 'Согласиться на всё',
+                  text: '«Хорошо, согласен. Сделаю тестовое за выходные».',
+                  quality: -1,
+                  effects: { energy: -8, fire: -3 },
+                  result: 'Ты получаешь плюс 5% и два дня без сна. В понедельник выходишь уставшим человеком, который уже должен быть продуктивным. Срочность победила, условия — нет.'
+                },
+                {
+                  id: 'b',
+                  short: 'Разделить срочность и объём',
+                  text: '«Срочность понимаю. Но тестовое — это проверка хода мыслей, а не скорость набора. Давайте сокращённый вариант на четыре дня и созвон по критериям».',
+                  quality: 2,
+                  effects: { fire: 6, energy: 2 },
+                  result: 'Марина: «Справедливо. Сделаем короткий вариант, срок — среда». Ты не отказался и не прогнулся. Ты предложил третий вариант, который устроил обе стороны.'
+                },
+                {
+                  id: 'c',
+                  short: 'Попросить +10% за срочность',
+                  text: '«Если нужно сегодня, давайте +10% и фиксированный объём тестового».',
+                  quality: 1,
+                  effects: { fire: 3, energy: -2 },
+                  result: 'Марина: «Плюс 10% не обещаю, но объём зафиксируем». Ты обозначил цену срочности. Разговор стал конкретнее, хотя не всё решено.'
+                },
+                {
+                  id: 'd',
+                  short: 'Отказаться от тестового',
+                  text: '«Тестовое делать не буду. У меня есть портфолио».',
+                  quality: 0,
+                  effects: { contacts: -2, fire: 2 },
+                  result: 'Марина: «Жаль, для нас это важно». Ты защитил границу, но потерял шанс показать ход мыслей. Иногда принцип стоит дорого. Иногда — нет.'
+                }
+              ]
             }
           ]
         }
@@ -1015,7 +1434,7 @@ body.is-landing .header-menu{display:none}
       opposite: 'seeker',
       tagline: '300 резюме. Одна вакансия.',
       description: 'Ты ищешь аналитика и тонешь в откликах. Собери команду, не потеряв людей и себя.',
-      duration: '5–8 минут',
+      duration: '6–9 минут',
       stats: [
         { key: 'time', label: 'Время', symbol: '◷', color: '#ffb07a', start: 60 },
         { key: 'trust', label: 'Доверие', symbol: '◇', color: '#5fd6c0', start: 45 },
@@ -1247,6 +1666,47 @@ body.is-landing .header-menu{display:none}
                   result: 'Тимур улыбается. Желание — не план. Через неделю он принимает другое предложение.'
                 }
               ]
+            },
+            {
+              stepTitle: 'Внутренний кандидат',
+              speaker: 'Света',
+              avatar: 'С',
+              question: '— Почему вы не рассматриваете кого-то изнутри?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: '«Внутренних не рассматриваем»',
+                  text: '«Мы всегда ищем на внешнем рынке. Так честнее».',
+                  quality: -2,
+                  effects: { trust: -7, culture: -6 },
+                  result: 'Света: «Понятно». В комнате становится тише. Люди, которые уже работают рядом, только что узнали, что их не считают вариантом.'
+                },
+                {
+                  id: 'b',
+                  short: 'Показать путь внутреннего кандидата',
+                  text: '«Рассматриваем. Вот как подать заявку, какие критерии и что мы дадим на переход. Если человек подходит — он в одном процессе с внешними».',
+                  quality: 2,
+                  effects: { trust: 7, culture: 5, time: -2 },
+                  result: 'Света: «Хорошо, что спросила». Ты не обещаешь должность, но даёшь понятный путь. Внутренний кандидат — не угроза, а ещё один шанс нанять человека, которого уже знаешь.'
+                },
+                {
+                  id: 'c',
+                  short: '«Пока не нашли, но посмотрим»',
+                  text: '«Пока не нашли. Если кто-то есть — пусть напишет, посмотрим».',
+                  quality: 1,
+                  effects: { trust: 3, time: -1 },
+                  result: 'Света кивает. Дверь приоткрыта, но без критериев. Кто-то напишет, кто-то нет. Ясность бы помогла.'
+                },
+                {
+                  id: 'd',
+                  short: '«Внутренние всегда обижаются»',
+                  text: '«Внутренние кандидаты — это всегда обиды. Проще брать с рынка».',
+                  quality: -1,
+                  effects: { trust: -5, culture: -3 },
+                  result: 'Света больше не задаёт вопросов. Ты называешь людей проблемой до того, как они ею стали.'
+                }
+              ]
             }
           ]
         },
@@ -1364,6 +1824,47 @@ body.is-landing .header-menu{display:none}
                   quality: 0,
                   effects: { trust: -2, culture: -2 },
                   result: 'Отпуск помогает от усталости, но не от неясных ожиданий. Через две недели он возвращается к тому же.'
+                }
+              ]
+            },
+            {
+              stepTitle: 'Обратная связь',
+              speaker: 'Аня',
+              avatar: 'А',
+              question: '— Кандидату, которого мы не взяли, нужна обратная связь. Что отправишь?',
+              prompt: 'Что ответишь?',
+              options: [
+                {
+                  id: 'a',
+                  short: 'Шаблон «мы выбрали другого»',
+                  text: '«Спасибо за интерес. Мы выбрали другого кандидата. Успехов в поиске».',
+                  quality: 0,
+                  effects: { culture: -1 },
+                  result: 'Письмо вежливое и пустое. Человек не узнаёт, что ему улучшить. Он просто закрывает вкладку и идёт дальше.'
+                },
+                {
+                  id: 'b',
+                  short: 'Конкретика и приглашение на будущее',
+                  text: '«Спасибо за разговор. Сильная сторона — кейс с отчётом. Стоит усилить — примеры влияния на решения. Если появится похожая роль, напишу».',
+                  quality: 2,
+                  effects: { trust: 6, culture: 4, time: -2 },
+                  result: 'Кандидат отвечает: «Спасибо, это редкость». Ты потратил десять минут и оставил дверь открытой. В следующий раз он вернётся сам.'
+                },
+                {
+                  id: 'c',
+                  short: 'Ничего не отправлять',
+                  text: '«Не обязательно. Если не взяли — и так всё понятно».',
+                  quality: -1,
+                  effects: { trust: -4, culture: -3 },
+                  result: 'Технически ты ничего не нарушил. Человечески — оставил человека в тишине, которую сам ненавидел, когда искал работу.'
+                },
+                {
+                  id: 'd',
+                  short: '«Не подошёл по культуре»',
+                  text: '«Вы не подошли по культуре».',
+                  quality: -1,
+                  effects: { trust: -3, culture: -2 },
+                  result: 'Кандидат: «А что это значит?» Ты не знаешь, что ответить. «Культура» стала словом, которым можно ничего не объяснять.'
                 }
               ]
             }
@@ -1516,6 +2017,269 @@ body.is-landing .header-menu{display:none}
     writeJSON(STORAGE.meta, meta);
   }
 
+  function getPlayerId() {
+    const saved = readJSON(STORAGE.player, '');
+    if (typeof saved === 'string' && saved) return saved;
+    const id = makeId();
+    writeJSON(STORAGE.player, id);
+    return id;
+  }
+
+  function getAchievements() {
+    const saved = readJSON(STORAGE.achievements, {});
+    return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  }
+
+  function unlockAchievements(keys, silent = false) {
+    const all = getAchievements();
+    const fresh = [];
+    (Array.isArray(keys) ? keys : [keys]).forEach((key) => {
+      const definition = ACHIEVEMENTS[key];
+      if (!definition || all[key]) return;
+      all[key] = { at: Date.now() };
+      fresh.push(definition.title);
+    });
+    if (!fresh.length) return false;
+    writeJSON(STORAGE.achievements, all);
+    if (!silent) {
+      window.setTimeout(() => {
+        const label = fresh.length === 1 ? `Ачивка: ${fresh[0]}` : `Новые ачивки: ${fresh.join(' · ')}`;
+        toast(label);
+      }, 220);
+    }
+    return true;
+  }
+
+  function unlockAchievement(key, silent = false) {
+    return unlockAchievements([key], silent);
+  }
+
+  function currentGeo() {
+    const saved = readJSON(STORAGE.geo, null);
+    if (saved && typeof saved === 'object') {
+      const city = cleanText(saved.city, 60);
+      const countryCode = cleanText(saved.countryCode, 2).toUpperCase();
+      return {
+        country: countryName(countryCode, saved.country),
+        city: CITY_NAMES_RU[city] || city || 'Неизвестно',
+        countryCode
+      };
+    }
+    return { country: 'Неизвестно', city: 'Неизвестно', countryCode: '' };
+  }
+
+  async function prefetchGeo() {
+    const saved = readJSON(STORAGE.geo, null);
+    if (saved && typeof saved === 'object' && saved.at && Date.now() - saved.at < 86400000) {
+      return currentGeo();
+    }
+
+    let data = null;
+    const backoffUntil = Number(readJSON(STORAGE.geoBackoff, 0)) || 0;
+    if (Date.now() >= backoffUntil) {
+      try {
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), 4500);
+        const response = await fetch('https://ipwho.is/?lang=ru', {
+          signal: controller.signal,
+          headers: { Accept: 'application/json' }
+        });
+        window.clearTimeout(timer);
+        if (response.ok) {
+          const parsed = await response.json();
+          if (parsed && parsed.success !== false && parsed.country_code) data = parsed;
+        } else if (response.status === 429) {
+          writeJSON(STORAGE.geoBackoff, Date.now() + 6 * 60 * 60 * 1000);
+        }
+      } catch (error) {
+        /* try the fallback service */
+      }
+    }
+
+    if (!data) {
+      try {
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), 4500);
+        const response = await fetch('https://get.geojs.io/v1/ip/geo.json', {
+          signal: controller.signal,
+          headers: { Accept: 'application/json' }
+        });
+        window.clearTimeout(timer);
+        if (response.ok) {
+          const parsed = await response.json();
+          if (parsed && parsed.country_code) data = parsed;
+        }
+      } catch (error) {
+        /* leave the geography unknown */
+      }
+    }
+
+    if (!data) {
+      return saved && typeof saved === 'object'
+        ? currentGeo()
+        : { country: 'Неизвестно', city: 'Неизвестно', countryCode: '' };
+    }
+
+    const countryCode = cleanText(data.country_code, 2).toUpperCase();
+    let country = cleanText(data.country, 60);
+    if (!country || /^[A-Za-z ,.'-]+$/.test(country)) {
+      try {
+        country = new Intl.DisplayNames(['ru'], { type: 'region' }).of(countryCode) || country;
+      } catch (error) {
+        /* keep the service value */
+      }
+    }
+    const rawCity = cleanText(data.city, 60);
+    const geo = {
+      country: cleanText(country, 60) || 'Неизвестно',
+      city: CITY_NAMES_RU[rawCity] || rawCity || 'Неизвестно',
+      countryCode,
+      at: Date.now()
+    };
+    writeJSON(STORAGE.geo, geo);
+    return geo;
+  }
+
+  function countryName(code, value) {
+    const source = cleanText(value, 60);
+    if (source && /^[A-Za-z ,.'-]+$/.test(source)) {
+      try {
+        return new Intl.DisplayNames(['ru'], { type: 'region' }).of(String(code || '').toUpperCase()) || source;
+      } catch (error) {
+        return source;
+      }
+    }
+    return source || 'Неизвестно';
+  }
+
+  function normalizeRun(row) {
+    if (!row || typeof row !== 'object') return null;
+    const mode = row.mode === 'seeker' || row.mode === 'employer' ? row.mode : null;
+    const tier = row.tier === 'win' || row.tier === 'mid' || row.tier === 'lose' ? row.tier : null;
+    const score = Number(row.score);
+    if (!mode || !tier || !Number.isFinite(score)) return null;
+
+    const rawDate = row.createdAt != null ? row.createdAt : row.created_at;
+    let createdAt = typeof rawDate === 'number' ? rawDate : Date.parse(rawDate);
+    if (!Number.isFinite(createdAt)) createdAt = Date.now();
+
+    const countryCode = cleanText(row.countryCode != null ? row.countryCode : row.country_code, 2).toUpperCase();
+    const country = countryName(countryCode, row.country);
+    const rawCity = cleanText(row.city, 60);
+    const city = CITY_NAMES_RU[rawCity] || rawCity || 'Неизвестно';
+    const clientId = cleanText(row.clientId != null ? row.clientId : row.client_id, 80)
+      || `run-${createdAt}-${score}-${Math.random().toString(36).slice(2, 8)}`;
+    const playerId = cleanText(row.playerId != null ? row.playerId : row.player_id, 80);
+
+    return {
+      clientId,
+      playerId,
+      mode,
+      score: Math.round(clamp(score, 0, 100)),
+      tier,
+      quality: Number(row.quality) || 0,
+      country,
+      city,
+      countryCode,
+      createdAt
+    };
+  }
+
+  function getLocalRuns() {
+    const saved = readJSON(STORAGE.runs, []);
+    if (!Array.isArray(saved)) return [];
+    return saved.map(normalizeRun).filter(Boolean).slice(0, 120);
+  }
+
+  function saveLocalRuns(runs) {
+    writeJSON(STORAGE.runs, (Array.isArray(runs) ? runs : []).slice(0, 120));
+  }
+
+  function mergeRuns(...groups) {
+    const map = new Map();
+    groups.flat().forEach((run) => {
+      if (run && run.clientId && !map.has(run.clientId)) map.set(run.clientId, run);
+    });
+    return [...map.values()];
+  }
+
+  async function submitRun(run) {
+    if (!analyticsReady || !run) return false;
+    try {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 8000);
+      const response = await fetch(analyticsEndpoint, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: analyticsHeaders({
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        }),
+        body: JSON.stringify({
+          client_id: run.clientId,
+          player_id: run.playerId,
+          mode: run.mode,
+          score: run.score,
+          tier: run.tier,
+          quality: run.quality,
+          country: run.country,
+          city: run.city,
+          country_code: run.countryCode
+        })
+      });
+      window.clearTimeout(timer);
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async function fetchRemoteRuns() {
+    if (!analyticsReady) return null;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 9000);
+    const limit = Math.max(1, Math.min(5000, Number(ANALYTICS.limit) || 1000));
+    try {
+      const response = await fetch(`${analyticsEndpoint}?select=*&order=created_at.desc&limit=${limit}`, {
+        signal: controller.signal,
+        headers: analyticsHeaders({
+          Accept: 'application/json'
+        })
+      });
+      window.clearTimeout(timer);
+      if (!response.ok) throw new Error(`stats http ${response.status}`);
+      const rows = await response.json();
+      if (!Array.isArray(rows)) throw new Error('stats shape');
+      return rows.map(normalizeRun).filter(Boolean);
+    } catch (error) {
+      window.clearTimeout(timer);
+      throw error;
+    }
+  }
+
+  function recordRun(snapshot) {
+    if (!snapshot) return null;
+    const geo = currentGeo();
+    const run = normalizeRun({
+      clientId: makeId(),
+      playerId: getPlayerId(),
+      mode: snapshot.mode,
+      score: snapshot.score,
+      tier: snapshot.tier,
+      quality: snapshot.quality,
+      country: geo.country,
+      city: geo.city,
+      countryCode: geo.countryCode,
+      createdAt: Date.now()
+    });
+    if (!run) return null;
+    const local = getLocalRuns();
+    local.unshift(run);
+    saveLocalRuns(local);
+    void submitRun(run);
+    return run;
+  }
+
   function getSave() {
     const saved = readJSON(STORAGE.save, null);
     if (!saved || saved.version !== 1) return null;
@@ -1559,6 +2323,8 @@ body.is-landing .header-menu{display:none}
   let lastResult = null;
   let soundOn = true;
   let busy = false;
+  let statsState = { loading: false, remote: null, error: false, updatedAt: 0 };
+  let statsRequest = 0;
 
   try {
     soundOn = localStorage.getItem(STORAGE.sound) !== 'off';
@@ -1570,10 +2336,35 @@ body.is-landing .header-menu{display:none}
     return state ? ROLES[state.mode].levels[state.levelIndex] : null;
   }
 
+  function runKey(part) {
+    return `${state ? state.seed || 0 : 0}:${state ? state.mode : ''}:${state ? state.levelIndex : 0}:${part}`;
+  }
+
+  function orderedSteps(level) {
+    if (!level || !level.steps) return null;
+    return seededShuffle(level.steps, `${runKey('steps')}`);
+  }
+
+  function orderedOptions(step) {
+    if (!step || !Array.isArray(step.options)) return [];
+    return seededShuffle(step.options, `${runKey(`options:${state ? state.stepIndex : 0}`)}`);
+  }
+
+  function orderedBlocks(level) {
+    if (!level || !Array.isArray(level.blocks)) return [];
+    return seededShuffle(level.blocks, runKey('blocks'));
+  }
+
+  function orderedCandidates(level) {
+    if (!level || !Array.isArray(level.candidates)) return [];
+    return seededShuffle(level.candidates, runKey('candidates'));
+  }
+
   function currentStep() {
     const level = currentLevel();
     if (!level) return null;
-    return level.steps ? level.steps[state.stepIndex] : level;
+    const steps = orderedSteps(level);
+    return steps ? steps[state.stepIndex] : level;
   }
 
   function initLevelMini() {
@@ -1661,6 +2452,7 @@ body.is-landing .header-menu{display:none}
     state = {
       version: 1,
       mode,
+      seed: randomSeed(),
       levelIndex: 0,
       stepIndex: 0,
       stats: {},
@@ -1691,13 +2483,15 @@ body.is-landing .header-menu{display:none}
       });
     }
     if (!Array.isArray(state.history)) state.history = [];
+    if (!state.seed) state.seed = randomSeed();
     if (!state.mini) initLevelMini();
     screen = 'game';
+    persist();
     render({ scroll: true });
   }
 
   function goHome() {
-    if (screen === 'game' && state) persist();
+    if (state) persist();
     state = null;
     lastResult = null;
     screen = 'landing';
@@ -1740,6 +2534,8 @@ body.is-landing .header-menu{display:none}
       best
     };
 
+    recordRun(snapshot);
+
     lastResult = snapshot;
     state = null;
     clearSave();
@@ -1748,9 +2544,12 @@ body.is-landing .header-menu{display:none}
 
     sfx(tier === 'win' ? 'win' : tier === 'lose' ? 'lose' : 'good');
     if (tier === 'win') launchConfetti();
-    if (snapshot.meta.newBoth) {
-      window.setTimeout(() => toast('Ачивка: обе стороны одной истории'), 750);
-    }
+
+    const freshAchievements = ['first'];
+    if (snapshot.meta.newBoth) freshAchievements.push('both');
+    if (score >= 80) freshAchievements.push('perfect');
+    if (!snapshot.history.some((item) => item.quality < 0)) freshAchievements.push('clean');
+    unlockAchievements(freshAchievements);
   }
 
   /* ------------------------------------------------------------
@@ -1829,6 +2628,310 @@ body.is-landing .header-menu{display:none}
     </div>`;
   }
 
+  const TIER_NAMES = { win: 'Предложение', mid: 'Компромисс', lose: 'Честный финал' };
+  const MODE_NAMES = { seeker: 'Соискатель', employer: 'Наниматель' };
+
+  function flagFor(code) {
+    const value = String(code || '').toUpperCase();
+    if (!/^[A-Z]{2}$/.test(value)) return '🌍';
+    return value.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+  }
+
+  function aggregateRuns(runs, playerId) {
+    const safe = Array.isArray(runs) ? runs : [];
+    const total = safe.length;
+    const sum = safe.reduce((acc, run) => acc + run.score, 0);
+    const players = new Set(safe.map((run) => run.playerId).filter(Boolean)).size;
+    const modes = {
+      seeker: { count: 0, sum: 0, best: 0 },
+      employer: { count: 0, sum: 0, best: 0 }
+    };
+    const tiers = { win: 0, mid: 0, lose: 0 };
+    const countries = new Map();
+    const cities = new Map();
+
+    safe.forEach((run) => {
+      const mode = modes[run.mode];
+      if (mode) {
+        mode.count += 1;
+        mode.sum += run.score;
+        mode.best = Math.max(mode.best, run.score);
+      }
+      if (tiers[run.tier] != null) tiers[run.tier] += 1;
+
+      const countryKey = run.countryCode || run.country;
+      if (!countries.has(countryKey)) {
+        countries.set(countryKey, {
+          name: run.country,
+          code: run.countryCode,
+          count: 0,
+          sum: 0,
+          best: 0
+        });
+      }
+      const country = countries.get(countryKey);
+      country.count += 1;
+      country.sum += run.score;
+      country.best = Math.max(country.best, run.score);
+
+      const cityKey = `${run.countryCode || run.country}|${run.city}`;
+      if (!cities.has(cityKey)) {
+        cities.set(cityKey, {
+          name: run.city,
+          country: run.country,
+          code: run.countryCode,
+          count: 0,
+          sum: 0,
+          best: 0
+        });
+      }
+      const city = cities.get(cityKey);
+      city.count += 1;
+      city.sum += run.score;
+      city.best = Math.max(city.best, run.score);
+    });
+
+    const toList = (map) => [...map.values()]
+      .map((item) => ({
+        ...item,
+        avg: item.count ? Math.round(item.sum / item.count) : 0
+      }))
+      .sort((a, b) => b.count - a.count || b.avg - a.avg || a.name.localeCompare(b.name));
+
+    const mine = safe.filter((run) => playerId && run.playerId === playerId);
+    const leaderboard = safe.slice()
+      .sort((a, b) => b.score - a.score || b.createdAt - a.createdAt)
+      .slice(0, 10);
+    const recent = safe.slice()
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, 4);
+
+    return {
+      total,
+      players,
+      avg: total ? Math.round(sum / total) : 0,
+      best: total ? Math.max(...safe.map((run) => run.score)) : 0,
+      modes,
+      tiers,
+      countries: toList(countries),
+      cities: toList(cities),
+      leaderboard,
+      recent,
+      mine,
+      myBest: mine.length ? Math.max(...mine.map((run) => run.score)) : 0
+    };
+  }
+
+  async function loadStats(force = false) {
+    if (statsState.loading && !force) return;
+    const request = ++statsRequest;
+    statsState.loading = true;
+    statsState.error = false;
+    if (screen === 'stats') render();
+    if (!analyticsReady) {
+      statsState.loading = false;
+      if (screen === 'stats') render();
+      return;
+    }
+    try {
+      const remote = await fetchRemoteRuns();
+      if (request !== statsRequest) return;
+      statsState.remote = remote;
+      statsState.updatedAt = Date.now();
+    } catch (error) {
+      if (request !== statsRequest) return;
+      statsState.error = true;
+    }
+    statsState.loading = false;
+    if (screen === 'stats') render();
+  }
+
+  function openStats() {
+    unlockAchievement('stats', true);
+    if (state) persist();
+    screen = 'stats';
+    statsState = { loading: true, remote: null, error: false, updatedAt: 0 };
+    render({ scroll: true });
+    loadStats(true);
+  }
+
+  function geoRows(items, limit = 8) {
+    if (!items.length) return '<div class="stats-empty">Пока нет данных. Стань первым в этом списке.</div>';
+    const max = Math.max(...items.map((item) => item.count), 1);
+    return `<div class="geo-list">${items.slice(0, limit).map((item) => `
+      <div class="geo-row">
+        <div class="geo-row-head">
+          <span>${flagFor(item.code)}</span>
+          <span>${escapeHTML(item.name)}</span>
+          <b>${formatNumber(item.count)}</b>
+        </div>
+        <span class="geo-count">${item.avg}/100</span>
+        <div class="geo-bar"><i style="width:${Math.max(6, Math.round((item.count / max) * 100))}%"></i></div>
+      </div>`).join('')}</div>`;
+  }
+
+  function leaderboardHTML(runs, playerId) {
+    if (!runs.length) {
+      return statsState.loading
+        ? '<div class="stats-skeleton"></div><div class="stats-skeleton"></div><div class="stats-skeleton"></div>'
+        : '<div class="stats-empty">Пока никто не дошёл до финала. Будь первым — и займи первое место.</div>';
+    }
+    return `<ol class="lb-list">${runs.map((run, index) => {
+      const mine = playerId && run.playerId === playerId;
+      const place = [run.city, run.country].filter((value) => value && value !== 'Неизвестно').join(', ') || 'География скрыта';
+      return `<li class="lb-row ${mine ? 'you' : ''}">
+        <span class="lb-rank">${String(index + 1).padStart(2, '0')}</span>
+        <div class="lb-main">
+          <div class="lb-name"><span class="lb-flag">${flagFor(run.countryCode)}</span>${escapeHTML(place)}${mine ? '<span class="lb-you">ты</span>' : ''}</div>
+          <div class="lb-meta">${MODE_NAMES[run.mode]} · ${TIER_NAMES[run.tier]} · ${timeAgo(run.createdAt)}</div>
+        </div>
+        <div class="lb-score"><b>${run.score}</b><span>из 100</span></div>
+      </li>`;
+    }).join('')}</ol>`;
+  }
+
+  function renderStats() {
+    const playerId = getPlayerId();
+    const local = getLocalRuns();
+    const runs = mergeRuns(local, statsState.remote || []);
+    const data = aggregateRuns(runs, playerId);
+    const totalMode = Math.max(data.modes.seeker.count + data.modes.employer.count, 1);
+    const achievements = getAchievements();
+    const unlockedCount = Object.keys(ACHIEVEMENTS).filter((key) => achievements[key]).length;
+    const badgeClass = !analyticsReady
+      ? 'local'
+      : statsState.error
+        ? 'error'
+        : '';
+    const badgeText = !analyticsReady
+      ? 'Локальные данные'
+      : statsState.loading
+        ? 'Обновляем общий рейтинг'
+        : statsState.error
+          ? 'Общий рейтинг недоступен'
+          : 'Общие данные';
+    const note = !analyticsReady
+      ? 'Пока здесь только прохождения этого браузера. Общий рейтинг появится, когда автор его включит — тогда сюда попадут результаты всех игроков.'
+      : statsState.error
+        ? 'Не удалось связаться с общим рейтингом. Показаны последние доступные данные — попробуй обновить позже.'
+        : 'Данные анонимны: сторона, результат, страна и город. Без имён, почты и телефонов. География определяется по IP приблизительно.';
+
+    const modeRows = Object.entries(data.modes).map(([mode, stats]) => {
+      const width = Math.round((stats.count / totalMode) * 100);
+      const avg = stats.count ? Math.round(stats.sum / stats.count) : 0;
+      return `<div class="stats-mode-row">
+        <span>${MODE_NAMES[mode]}<small>${avg}/100</small></span>
+        <span class="stats-mode-bar"><i style="width:${width}%"></i></span>
+        <b>${formatNumber(stats.count)}</b>
+      </div>`;
+    }).join('');
+
+    const tierRows = [
+      ['win', 'Победы'],
+      ['mid', 'Компромиссы'],
+      ['lose', 'Честные «нет»']
+    ].map(([tier, label]) => {
+      const count = data.tiers[tier] || 0;
+      const width = data.total ? Math.round((count / data.total) * 100) : 0;
+      return `<div class="stats-tier-row ${tier}">
+        <span>${label}</span>
+        <span class="stats-tier-bar"><i style="width:${width}%"></i></span>
+        <b>${formatNumber(count)}</b>
+      </div>`;
+    }).join('');
+
+    const recentRows = data.recent.length
+      ? data.recent.map((run) => {
+        const place = [run.city, run.country].filter((value) => value && value !== 'Неизвестно').join(', ') || 'География скрыта';
+        return `<div class="recent-row">
+          <span>${flagFor(run.countryCode)} ${escapeHTML(place)} · ${MODE_NAMES[run.mode]}</span>
+          <b>${run.score}</b>
+        </div>`;
+      }).join('')
+      : '<div class="recent-row"><span>Пока пусто.</span><b>—</b></div>';
+
+    const achievementHTML = Object.entries(ACHIEVEMENTS).map(([key, item]) => {
+      const unlocked = Boolean(achievements[key]);
+      return `<div class="ach-card ${unlocked ? '' : 'locked'}">
+        <b>${unlocked ? '✓ ' : '🔒 '}${escapeHTML(item.title)}</b>
+        <span>${unlocked ? escapeHTML(item.text) : 'Пока не открыта'}</span>
+      </div>`;
+    }).join('');
+
+    app.innerHTML = `<main class="screen stats-screen">
+      <div class="wrap">
+        <div class="stats-head">
+          <div>
+            <div class="eyebrow"><span class="pulse-dot"></span> статистика игры</div>
+            <h1>Кто прошёл<br>точку контакта</h1>
+            <p>Общий рейтинг прохождений: результаты, стороны, страны и города. Без регистрации и личных данных.</p>
+          </div>
+          <div class="stats-head-actions">
+            ${state ? '<button class="btn btn-lime btn-sm" data-action="continue">Продолжить игру</button>' : ''}
+            <button class="btn btn-ghost btn-sm" data-action="stats-refresh" ${statsState.loading ? 'disabled' : ''}>${statsState.loading ? 'Обновляем…' : 'Обновить'}</button>
+          </div>
+        </div>
+
+        <div class="stats-badge ${badgeClass}"><i></i>${badgeText}</div>
+
+        <div class="stats-kpi-grid">
+          <div class="stats-kpi"><b>${formatNumber(data.players)}</b><span>Игроков</span><small>Уникальные анонимные профили</small></div>
+          <div class="stats-kpi"><b>${formatNumber(data.total)}</b><span>Прохождений</span><small>Завершённые игры</small></div>
+          <div class="stats-kpi"><b>${data.avg}</b><span>Средний результат</span><small>По всем прохождениям</small></div>
+          <div class="stats-kpi"><b>${data.best}</b><span>Лучший результат</span><small>${data.total ? 'Максимум из 100' : 'Пока нет данных'}</small></div>
+        </div>
+
+        <div class="stats-panels">
+          <section class="stats-panel" aria-label="Лучшие прохождения">
+            <div class="stats-panel-head">
+              <div>
+                <h2>Лучшие прохождения</h2>
+                <p>Топ-10 по силе пути. Сторона и финал — в подписи.</p>
+              </div>
+              <span>${formatNumber(runs.length)} записей</span>
+            </div>
+            ${leaderboardHTML(data.leaderboard, playerId)}
+          </section>
+
+          <section class="stats-panel" aria-label="Стороны и финалы">
+            <h2>Стороны и финалы</h2>
+            <div class="stats-mode">${modeRows}</div>
+            <div class="stats-tiers">${tierRows}</div>
+            <div class="stats-recent">
+              <div class="stats-recent-title">Последние прохождения</div>
+              ${recentRows}
+            </div>
+            <div class="stats-mode-note">${data.mine.length ? `Твой лучший результат: <b>${data.myBest}/100</b>. Прохождений: ${data.mine.length}.` : 'Ты ещё не в рейтинге. Сыграй — и здесь появится твой результат.'}</div>
+          </section>
+        </div>
+
+        <div class="geo-grid">
+          <section class="stats-panel" aria-label="Страны">
+            <div class="stats-panel-head"><div><h2>Страны</h2><p>Откуда играли.</p></div><span>топ-8</span></div>
+            ${geoRows(data.countries)}
+          </section>
+          <section class="stats-panel" aria-label="Города">
+            <div class="stats-panel-head"><div><h2>Города</h2><p>Где играли чаще всего.</p></div><span>топ-8</span></div>
+            ${geoRows(data.cities)}
+          </section>
+        </div>
+
+        <section class="stats-panel" style="margin-top:16px" aria-label="Достижения">
+          <div class="stats-panel-head"><div><h2>Ачивки</h2><p>Секреты, которые открываются по ходу игры.</p></div><span>${unlockedCount} из ${Object.keys(ACHIEVEMENTS).length}</span></div>
+          <div class="stats-ach-grid">${achievementHTML}</div>
+        </section>
+
+        <p class="stats-note">${note}</p>
+
+        <div class="stats-actions">
+          <button class="btn btn-primary" data-action="start" data-mode="seeker">Сыграть за соискателя</button>
+          <button class="btn btn-lime" data-action="start" data-mode="employer">Сыграть за нанимателя</button>
+          <button class="btn btn-ghost" data-action="joke">Ещё шутка</button>
+        </div>
+      </div>
+    </main>`;
+  }
+
   function renderLanding() {
     const meta = getMeta();
     const saved = getSave();
@@ -1854,7 +2957,7 @@ body.is-landing .header-menu{display:none}
       <div class="wrap">
         <section class="hero">
           <div class="hero-copy">
-            <div class="eyebrow"><span class="pulse-dot"></span> игра · 5–8 минут · без регистрации</div>
+            <div class="eyebrow"><span class="pulse-dot"></span> игра · 6–9 минут · без регистрации</div>
             <h1>Точка <br><span class="grad">контакта</span></h1>
             <p class="lead">Игра о поиске работы, в которой отказ — не приговор, а поворот. Выбери сторону и пройди путь до предложения. Или до честного «нет».</p>
             <div class="hero-meta">
@@ -1922,11 +3025,20 @@ body.is-landing .header-menu{display:none}
 
         ${bothBanner}
 
+        <section class="stats-cta" aria-label="Статистика игроков">
+          <div>
+            <div class="eyebrow"><span class="pulse-dot"></span> общая статистика</div>
+            <h2>Кто уже прошёл этот путь?</h2>
+            <p>Результаты, стороны, страны, города и лучшие прохождения. Без регистрации и личных данных.</p>
+          </div>
+          <button class="btn btn-lime" data-action="stats">Смотреть рейтинг <span>→</span></button>
+        </section>
+
         <section class="features" aria-label="Что внутри">
           <div class="feature">
             <div class="feature-num">01</div>
             <h3>Каждое сообщение — ход</h3>
-            <p>Резюме, нетворкинг, собеседование. Решения меняют статистику и финал, а не просто листают историю.</p>
+            <p>Вопросы и варианты перемешиваются: заучивать порядок бесполезно. Решения меняют статистику и финал, а не просто листают историю.</p>
           </div>
           <div class="feature">
             <div class="feature-num">02</div>
@@ -2034,7 +3146,7 @@ body.is-landing .header-menu{display:none}
         </div>`
       : '';
     const prompt = step.prompt || 'Что выберешь?';
-    const options = step.options
+    const options = orderedOptions(step)
       .map((option, index) => `<button class="choice" data-action="choose" data-option="${option.id}">
         <span class="choice-key">${'ABCD'[index]}</span>
         <span class="choice-text">${option.text}</span>
@@ -2046,7 +3158,7 @@ body.is-landing .header-menu{display:none}
 
   function renderResume(level) {
     const selected = state.mini.selected;
-    const blocks = level.blocks
+    const blocks = orderedBlocks(level)
       .map((block) => {
         const isSelected = selected.includes(block.id);
         return `<button class="block-card ${isSelected ? 'selected' : ''}" data-action="block" data-block="${block.id}" aria-pressed="${isSelected}">
@@ -2070,9 +3182,10 @@ body.is-landing .header-menu{display:none}
   }
 
   function renderSort(level) {
-    const candidate = level.candidates[state.mini.index];
+    const candidates = orderedCandidates(level);
+    const candidate = candidates[state.mini.index];
     if (!candidate) return '';
-    const progress = Math.round((state.mini.index / level.candidates.length) * 100);
+    const progress = Math.round((state.mini.index / candidates.length) * 100);
     return `<p class="prompt resume-prompt">${level.prompt}</p>
       <div class="candidate-card">
         <div class="cand-top">
@@ -2081,7 +3194,7 @@ body.is-landing .header-menu{display:none}
             <div class="cand-name">${candidate.name}, ${candidate.age}</div>
             <div class="cand-role">${candidate.role}</div>
           </div>
-          <div class="cand-count">Резюме ${state.mini.index + 1} / ${level.candidates.length}</div>
+          <div class="cand-count">Резюме ${state.mini.index + 1} / ${candidates.length}</div>
         </div>
         <p class="cand-summary">${candidate.summary}</p>
         <div class="cand-tags">${candidate.tags.map((tag) => `<span class="tag">${tag}</span>`).join('')}</div>
@@ -2092,7 +3205,7 @@ body.is-landing .header-menu{display:none}
         <div class="funnel">
           <span>300 откликов</span>
           <span class="funnel-bar"><i style="width:${progress}%"></i></span>
-          <span>${level.candidates.length} разговоров</span>
+          <span>${candidates.length} разговоров</span>
         </div>
       </div>`;
   }
@@ -2302,6 +3415,7 @@ body.is-landing .header-menu{display:none}
 
         <div class="result-actions">
           <button class="btn btn-primary" data-action="share">Поделиться результатом</button>
+          <button class="btn btn-ghost" data-action="stats">Смотреть рейтинг</button>
           <button class="btn btn-ghost" data-action="other-mode">Сыграть за ${otherRole.label.toLowerCase()}</button>
           <button class="btn btn-ghost" data-action="replay">Пройти заново</button>
           <button class="btn btn-ghost" data-action="home">В меню</button>
@@ -2359,6 +3473,9 @@ body.is-landing .header-menu{display:none}
     } else if (screen === 'result') {
       renderResult();
       document.title = lastResult ? `${lastResult.ending.title} · Точка контакта` : 'Точка контакта';
+    } else if (screen === 'stats') {
+      renderStats();
+      document.title = 'Статистика игроков · Точка контакта';
     }
 
     if (opts.scroll) {
@@ -2508,7 +3625,8 @@ body.is-landing .header-menu{display:none}
     if (!state || !state.mini || state.pending || busy) return;
     const level = currentLevel();
     if (!level || level.type !== 'sort') return;
-    const candidate = level.candidates[state.mini.index];
+    const candidates = orderedCandidates(level);
+    const candidate = candidates[state.mini.index];
     if (!candidate) return;
 
     busy = true;
@@ -2530,7 +3648,7 @@ body.is-landing .header-menu{display:none}
       state.mini.index += 1;
       spawnReaction(candidate.good === shortlist ? 2 : -1, origin);
 
-      if (state.mini.index >= level.candidates.length) {
+      if (state.mini.index >= candidates.length) {
         finishSort(level);
       } else {
         persist();
@@ -2543,7 +3661,7 @@ body.is-landing .header-menu{display:none}
 
   function finishSort(level) {
     const decisions = state.mini.decisions;
-    const total = level.candidates.length;
+    const total = orderedCandidates(level).length;
     const correct = decisions.filter((decision) => decision.shortlist === decision.good).length;
     const quality = correct * 2 - total;
     const effects = {
@@ -2722,7 +3840,28 @@ body.is-landing .header-menu{display:none}
   let pokeTimer = null;
   let pokeClassTimer = null;
 
+  function showJoke() {
+    const line = MEME_LINES[Math.floor(Math.random() * MEME_LINES.length)];
+    toast(line);
+    sfx('poke');
+    unlockAchievement('joke', true);
+  }
+
+  function handleBrandClick() {
+    const count = (Number(readJSON(STORAGE.logo, 0)) || 0) + 1;
+    writeJSON(STORAGE.logo, count);
+    if (count >= 7) {
+      const fresh = unlockAchievement('logo', true);
+      if (fresh) window.setTimeout(() => toast('Семь раз отмерь. Логотип одобряет.'), 320);
+    }
+  }
+
   function pokeDot() {
+    const count = (Number(readJSON(STORAGE.poke, 0)) || 0) + 1;
+    writeJSON(STORAGE.poke, count);
+    unlockAchievement('poke', true);
+    if (count >= 10) unlockAchievement('poked10', true);
+
     const host = $('.hero-visual');
     if (!host) return;
     const previous = $('.orbit-say');
@@ -2732,7 +3871,9 @@ body.is-landing .header-menu{display:none}
     bubble.className = 'orbit-say';
     bubble.setAttribute('role', 'status');
     bubble.setAttribute('aria-live', 'polite');
-    bubble.textContent = SUPPORT_QUOTES[Math.floor(Math.random() * SUPPORT_QUOTES.length)];
+    bubble.textContent = count >= 10
+      ? 'Десять поглаживаний. Ты официально точка-друг.'
+      : SUPPORT_QUOTES[Math.floor(Math.random() * SUPPORT_QUOTES.length)];
     host.appendChild(bubble);
 
     const core = $('.orbit-core');
@@ -2905,11 +4046,16 @@ body.is-landing .header-menu{display:none}
 
     if (action === 'home') {
       event.preventDefault();
+      if (target.classList.contains('brand')) handleBrandClick();
       goHome();
     } else if (action === 'start') {
       requestStart(target.dataset.mode);
     } else if (action === 'continue') {
       continueGame();
+    } else if (action === 'stats') {
+      openStats();
+    } else if (action === 'stats-refresh') {
+      loadStats(true);
     } else if (action === 'choose') {
       chooseOption(target.dataset.option, target.getBoundingClientRect());
     } else if (action === 'next') {
@@ -2922,6 +4068,8 @@ body.is-landing .header-menu{display:none}
       sortCandidate(target.dataset.decision, target.getBoundingClientRect());
     } else if (action === 'poke') {
       pokeDot();
+    } else if (action === 'joke') {
+      showJoke();
     } else if (action === 'share') {
       shareResult();
     } else if (action === 'replay') {
@@ -2935,6 +4083,24 @@ body.is-landing .header-menu{display:none}
     if (event.detail > 0 && typeof target.blur === 'function') target.blur();
   });
 
+  const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let konamiIndex = 0;
+  document.addEventListener('keydown', (event) => {
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (key === KONAMI[konamiIndex]) {
+      konamiIndex += 1;
+      if (konamiIndex === KONAMI.length) {
+        konamiIndex = 0;
+        unlockAchievement('konami', true);
+        launchConfetti();
+        spawnReaction(2, null, ['🐈', '🐈‍⬛', '✨']);
+        toast('Секретный режим: кот-аналитик. Мяу.');
+      }
+    } else {
+      konamiIndex = key === KONAMI[0] ? 1 : 0;
+    }
+  });
+
   document.addEventListener('keydown', (event) => {
     if (screen !== 'game' || !state || state.pending) return;
     if (event.key < '1' || event.key > '4') return;
@@ -2942,7 +4108,7 @@ body.is-landing .header-menu{display:none}
     if (!level || level.type === 'resume' || level.type === 'sort') return;
     const step = currentStep();
     if (!step || !step.options) return;
-    const option = step.options[Number(event.key) - 1];
+    const option = orderedOptions(step)[Number(event.key) - 1];
     if (option) {
       event.preventDefault();
       chooseOption(option.id);
@@ -2957,6 +4123,7 @@ body.is-landing .header-menu{display:none}
      boot
   ------------------------------------------------------------ */
   initCanvas();
+  prefetchGeo();
   render();
 })();
 
